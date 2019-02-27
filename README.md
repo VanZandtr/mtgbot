@@ -3,7 +3,7 @@ Magic: The Gathering Trending Card Bot
 
 Purpose:
 
-    mtgbot.py will parse any MTGGoldfish List (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP     is a three letter expansion abbreviation followed by the ONLINE/PAPER)
+   mtgbot.py will parse any MTGGoldfish List (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP     is a three letter expansion abbreviation followed by the ONLINE/PAPER)
 
 Setup/Use:
 
