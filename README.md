@@ -1,11 +1,12 @@
 # mtgbot
 Magic: The Gathering Trending Card Bot
 
-Purpose:
+## Purpose:
 
-   mtgbot.py will parse any MTGGoldfish List (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP     is a three letter expansion abbreviation followed by the ONLINE/PAPER)
+   mtgbot.py will parse any MTGGoldfish List 
+   (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP is a three letter expansion abbreviation followed by the ONLINE/PAPER)
 
-Setup/Use:
+## Setup/Use:
 
   1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method (line --- & ---) & rename vars
   2.) add the vars to msg ----> used to add multiple list to a single email
@@ -16,9 +17,9 @@ Setup/Use:
       app_pass: your app password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
       recp: where the email will go
       
-  5.) run via "python mtgbot.py "
+  5.) run via "python mtgbot.py " or with preferred IDE
   
- Automate:
+ ## Automate:
     
     Linux:  env EDITOR=nano crontab -e 0 12 * * *  /full/path/to/python /full/path/to/script.py #runs everyday at 12
     
