@@ -39,7 +39,7 @@ Magic: The Gathering Trending Card Bot
    
   In the web method you can change the index of "row" to obtain different elements of the list.
   
-  Row[x]
+  Row[x]  
   0: Card Name  
   1: Set Name  
   2: Rarity  
