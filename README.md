@@ -20,11 +20,27 @@ Magic: The Gathering Trending Card Bot
   5.) run via "python mtgbot.py " or with preferred IDE
   
  ## Automate:
-    
+ 
     Linux:  env EDITOR=nano crontab -e 0 12 * * *  /full/path/to/python /full/path/to/script.py #runs everyday at 12
     
     Windows: schtasks.exe /create /TN $taskName /ST $time /SC DAILY /SD $startDate /ED $endDate /TR "powershell.exe -file C:\users\myprofile\desktop\scriptname.ps1 -mode $serviceChoice -list $listChoice"
 
-  
+ ## Additional Options:
 
+  Note: The current script is parsing the Modern List as well as Zendikar Expeditions.
    
+  In the web method you can change the index of "row" to obtain different elements of the list.
+   
+  0: Card Name&nbsp;
+  1: Set Name&nbsp;
+  2: Rarity&nbsp;
+  3: Price&nbsp;
+  4: Daily Price Change (+/-)&nbsp;
+  5: Daily Percent Change (+/-)&nbsp;
+  6: Weekly Price Change (+/-)&nbsp;
+  7: Weekly Percent Change (+/-)&nbsp;
+
+## Future Changes:
+
+   * Indentation Fixes
+   * Colors and Text Accents (Bold, Italics, etc)
