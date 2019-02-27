@@ -12,16 +12,16 @@ Magic: The Gathering Trending Card Bot
 
 ## Setup/Use:
 
-  1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method & set vars (my_list = web(1, "url"))
-  2.) add the vars to "msg" ----> used to add multiple list to a single email
-  3.) add names of each list in the same order as step 2 to "names"
-  4.) login into gmail and set recipient email
+  1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method & set vars (my_list = web(1, "url"))  
+  2.) add the vars to "msg" ----> used to add multiple list to a single email  
+  3.) add names of each list in the same order as step 2 to "names"  
+  4.) login into gmail and set recipient email  
   
       user: your_gmail@gmail.com
       app_pass: your_app_password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
       recp: where_to_send@gmail.com
       
-  5.) run via "python mtgbot.py " or with preferred IDE
+  5.) run via "python mtgbot.py " or with preferred IDE  
   
  ## Automate:
  
