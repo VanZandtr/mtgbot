@@ -35,7 +35,7 @@ Magic: The Gathering Trending Card Bot
 
  ## Additional Options:
 
-  Note: The current script is parsing the Modern List as well as Zendikar Expeditions with as an example.
+  Note: The current script is parsing the Modern List as well as Zendikar Expeditions as an example.
    
   In the web method you can change the index of "row" to obtain different elements of the list.
   
