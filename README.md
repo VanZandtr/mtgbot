@@ -2,9 +2,13 @@
 Magic: The Gathering Trending Card Bot
 
 ## Purpose:
+   
+   Automate a card popularity script that notices and alerts the user to different price trends based on publicly available price lists, with the goal being that the user will better predict increases/decreases in cards to help the purchasing process.
+   
+## How it Works:
 
    mtgbot.py will parse any MTGGoldfish List 
-   (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP is a three letter expansion abbreviation followed by the ONLINE/PAPER)
+   (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP is a three letter expansion abbreviation or other acceptable list (modern) followed by the ONLINE/PAPER)
 
 ## Setup/Use:
 
@@ -32,10 +36,11 @@ Magic: The Gathering Trending Card Bot
 
  ## Additional Options:
 
-  Note: The current script is parsing the Modern List as well as Zendikar Expeditions as an example.
+  Note: The current script is parsing the Modern List as well as Zendikar Expeditions with as an example.
    
   In the web method you can change the index of "row" to obtain different elements of the list.
-   
+  
+  Row[x]
   0: Card Name  
   1: Set Name  
   2: Rarity  
@@ -44,9 +49,12 @@ Magic: The Gathering Trending Card Bot
   5: Daily Percent Change (+/-)  
   6: Weekly Price Change (+/-)  
   7: Weekly Percent Change (+/-)  
+  
+  I currently have it set so that it will return any Daily Price Change > $.50 OR Weekly Price Change < 0.
+  Thus, I want to know if a card is starting to take attention or if a high priced card is declining
 
 ## Future Changes:
 
    * Indentation Fixes
    * Colors and Text Accents (Bold, Italics, etc)
-
+   * Hold and Compare prices over a certain time period (>week)
