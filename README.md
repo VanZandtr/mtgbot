@@ -8,14 +8,14 @@ Magic: The Gathering Trending Card Bot
 
 ## Setup/Use:
 
-  1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method (line --- & ---) & rename vars
-  2.) add the vars to msg ----> used to add multiple list to a single email
-  3.) add names of each list in the same order as step 2
+  1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method & set vars (my_list = web(1, "url"))
+  2.) add the vars to "msg" ----> used to add multiple list to a single email
+  3.) add names of each list in the same order as step 2 to "names"
   4.) login into gmail and set recipient email
   
-      user: your gmail login name
-      app_pass: your app password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
-      recp: where the email will go
+      user: your_gmail@gmail.com
+      app_pass: your_app_password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
+      recp: where_to_send@gmail.com
       
   5.) run via "python mtgbot.py " or with preferred IDE
   
@@ -24,10 +24,15 @@ Magic: The Gathering Trending Card Bot
     Linux:  env EDITOR=nano crontab -e 0 12 * * *  /full/path/to/python /full/path/to/script.py #runs everyday at 12
     
     Windows: schtasks.exe /create /TN $taskName /ST $time /SC DAILY /SD $startDate /ED $endDate /TR "powershell.exe -file C:\users\myprofile\desktop\scriptname.ps1 -mode $serviceChoice -list $listChoice"
+    
+ ## Final Product:
+ 
+   [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+
 
  ## Additional Options:
 
-  Note: The current script is parsing the Modern List as well as Zendikar Expeditions.
+  Note: The current script is parsing the Modern List as well as Zendikar Expeditions as an example.
    
   In the web method you can change the index of "row" to obtain different elements of the list.
    
@@ -44,3 +49,4 @@ Magic: The Gathering Trending Card Bot
 
    * Indentation Fixes
    * Colors and Text Accents (Bold, Italics, etc)
+
