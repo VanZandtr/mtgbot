@@ -31,7 +31,7 @@ Magic: The Gathering Trending Card Bot
     
  ## Final Product:
  
-   [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+   [logo]: https://github.com/VanZandtr/mtgbot/mtgbot_image.PNG
 
 
  ## Additional Options:
