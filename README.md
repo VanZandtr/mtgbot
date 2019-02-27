@@ -69,5 +69,5 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
    * Hold and Compare prices over a certain time period (>week)
 
 ## Acknowledgements:
-   https://github.com/matthewlevy97: Automation/Reviewer
-   https://www.reddit.com/user/PineappleMisfit: License
+   https://github.com/matthewlevy97: Automation/Reviewer  
+   https://www.reddit.com/user/PineappleMisfit: License  
