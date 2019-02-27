@@ -26,7 +26,7 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
   6.) run via "python mtgbot.py " or with preferred IDE -----> You may have to install some of the imports used  
   7.) Refer to Additional Options to set trending options
   
- ## Automate:
+ ## Automation:
  
     Linux:  env EDITOR=nano crontab -e 0 12 * * *  /full/path/to/python /full/path/to/script.py #runs everyday at 12
     
@@ -68,4 +68,6 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
    * Colors and Text Accents (Bold, Italics, etc)
    * Hold and Compare prices over a certain time period (>week)
 
-## Acknowledgements
+## Acknowledgements:
+   https://github.com/matthewlevy97: Automation/Reviewer
+   https://www.reddit.com/user/PineappleMisfit: License
