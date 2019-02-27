@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+#Owner: VanZandtr, Github: https://github.com/VanZandtr/mtgbot/
+
 import requests
 from bs4 import BeautifulSoup
 import smtplib
 
+#web parser
 def web(page,WebUrl):
     if(page>0):
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -14,13 +17,12 @@ def web(page,WebUrl):
         combinedText = text.splitlines()
         
         
-        raw_list = [x for x in combinedText if x != '']
+        raw_list = [x for x in combinedText if x != '']#removes random empty spaces in list
         
-        
-        #print(raw_list)
-        front_index = -1
+                front_index = -1
         rear_index = -1
-                
+        
+        #finding cards from raw html text
         for i, j in enumerate(raw_list):
             if j == 'Weekly' and front_index == -1:
                 front_index = i
@@ -31,18 +33,12 @@ def web(page,WebUrl):
         if front_index == -1 or rear_index == -1:
             print("error in parsing text")
         
-        print(front_index)
-        print(raw_list[front_index])
-                
-        print(rear_index)
-        print(raw_list[rear_index])
-        
-        #trim up to card start and end
-        #389
+        #trim up to where cards start and end
         trim = raw_list[front_index + 2:rear_index - 8]
 
         card_map = list(chunks(trim, 8))
         
+        #help indents slightly
         largest_card = 0;
         for row in card_map:
             if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0:
@@ -51,7 +47,7 @@ def web(page,WebUrl):
                     print (largest_card)
                     print(row[0])
         
-        #print(*card_map, sep = "\n") 
+        #Search and create output format
         card_list = [];
         for row in card_map:
             if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0:
@@ -68,13 +64,14 @@ def web(page,WebUrl):
         return card_list
              
         
-# Create a function called "chunks" with two arguments, l and n:
+# Create a function called "chunks" with two arguments, l and n used to group cards with their respective elements
 def chunks(l, n):
     # For item i in a range that is a length of l,
     for i in range(0, len(l), n):
         # Create an index range for l of n items:
         yield l[i:i+n]
 
+#email sender
 def send_email(user, pwd, recipient, subject, body, tags):
     FROM = user
     TO = recipient if isinstance(recipient, list) else [recipient]
