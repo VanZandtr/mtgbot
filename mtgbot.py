@@ -18,7 +18,7 @@ names = ['Modern', 'Expedition Lands']
 send_email(user, app_pass, recp, sub, msg, names)
 
 
-#Refer to line 60 and 69 ;) for changes to your trends
+#Refer to line 60 and 69 ;) for changes to your trends ----> these should be the identical
 
 
 #web parser
@@ -54,10 +54,10 @@ def web(page,WebUrl):
 
         card_map = list(chunks(trim, 8))
         
-        #help indents slightly
+        #finds longest card name ----> help tab spacing slightly by offseting by longest card name
         largest_card = 0;
         for row in card_map:
-            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0:
+            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0: #Checking if Daily change >= 50 cents or if Weekly change is negative (Down Trend)
                 if len(row[0]) > largest_card:
                     largest_card = len(row[0])
                     print (largest_card)
@@ -66,7 +66,7 @@ def web(page,WebUrl):
         #Search and create output format
         card_list = [];
         for row in card_map:
-            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0:
+            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0: #Checking if Daily change >= 50 cents or if Weekly change is negative (Down Trend)
                 if len(row[0]) != largest_card: 
                     card_list.append((row[0] + '  ' + '\t' + 'Current Price: ' + 
                                       row[3] + '  ' + '\t' + 'Daily Price Trend: ' + 
