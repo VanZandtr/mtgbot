@@ -22,6 +22,7 @@ Magic: The Gathering Trending Card Bot
       recp: where_to_send@gmail.com
   5.) You MUST also "enable less secure apps" (https://support.google.com/accounts/answer/6010255?hl=en)  
   6.) run via "python mtgbot.py " or with preferred IDE -----> You may have to install some of the imports used
+  7.) Refer to Additional Options to set trending options
   
  ## Automate:
  
@@ -49,8 +50,15 @@ Magic: The Gathering Trending Card Bot
   6: Weekly Price Change (+/-)  
   7: Weekly Percent Change (+/-)  
   
-  I currently have it set so that it will return any Daily Price Change > $.50 OR Weekly Price Change < 0.
-  Thus, I want to know if a card is starting to take attention or if a high priced card is declining
+  Example:   
+   if float(row[4][:-1]) >= .5 or float(row[6][:-1]) < 0:  
+   
+   * row[4] is the daily price change and float(row[4][:-1]) is saying take the number at index 4 and remove the %/$ and convert it to a number from a string.
+  
+  I currently have it set so that it will return any Daily Price Change > $.50 OR Weekly Price Change < 0.  
+  Thus, I want to know if a card is starting to take attention or if a high priced card is declining  
+  
+  
 
 ## Future Changes:
 
