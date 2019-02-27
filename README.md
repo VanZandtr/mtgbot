@@ -1,6 +1,8 @@
 # mtgbot
 Magic: The Gathering Trending Card Bot
 
+Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/?st=jsnn5qgc&sh=ff0baf93
+
 ## Purpose:
    
    Automate a card popularity script that notices and alerts the user to different price trends based on publicly available price lists, with the goal being that the user will better predict increases/decreases in cards to help the purchasing process.
