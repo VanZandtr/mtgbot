@@ -67,3 +67,5 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
    * Indentation Fixes!!!!
    * Colors and Text Accents (Bold, Italics, etc)
    * Hold and Compare prices over a certain time period (>week)
+
+## Acknowledgements
