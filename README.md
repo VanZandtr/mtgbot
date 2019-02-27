@@ -31,7 +31,7 @@ Magic: The Gathering Trending Card Bot
     
  ## Final Product:
  
-![Alternate image text](https://someurl/imagelocation/image.png)
+![mtgbot Email](mtgbot/mtgbot_pic.PNG)
 
  ## Additional Options:
 
