@@ -21,7 +21,7 @@ Magic: The Gathering Trending Card Bot
       app_pass: your_app_password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
       recp: where_to_send@gmail.com
   5.) You MUST also "enable less secure apps" (https://support.google.com/accounts/answer/6010255?hl=en)  
-  6.) run via "python mtgbot.py " or with preferred IDE -----> You may have install some of the imports used
+  6.) run via "python mtgbot.py " or with preferred IDE -----> You may have to install some of the imports used
   
  ## Automate:
  
