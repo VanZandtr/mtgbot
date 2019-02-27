@@ -53,15 +53,15 @@ Magic: The Gathering Trending Card Bot
   Example:   
    if float(row[4][:-1]) >= .5 or float(row[6][:-1]) < 0:  
    
-   * row[4] is the daily price change and float(row[4][:-1]) is saying take the number at index 4 and remove the %/$ and convert it to a number from a string.
+   * row[4] is the daily price change and float(row[4][:-1]) is saying "take the number at row[4], remove the %/$ and convert it to a number from a string".
   
-  I currently have it set so that it will return any Daily Price Change > $.50 OR Weekly Price Change < 0.  
+  I currently have it set so that it will return any Daily Price Change >= $.50 OR Weekly Price Change < $0.  
   Thus, I want to know if a card is starting to take attention or if a high priced card is declining  
   
   
 
 ## Future Changes:
 
-   * Indentation Fixes
+   * Indentation Fixes!!!!
    * Colors and Text Accents (Bold, Italics, etc)
    * Hold and Compare prices over a certain time period (>week)
