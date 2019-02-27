@@ -5,6 +5,22 @@ import requests
 from bs4 import BeautifulSoup
 import smtplib
 
+modern_list = web(1,'https://www.mtggoldfish.com/index/modern#paper')
+expedition_list = web(1,'https://www.mtggoldfish.com/index/EXP#paper')
+
+user = 'youremail@gmail.com'
+app_pass = 'your_google_apps_password'
+recp = 'where_to_send@gmail.com'
+sub = 'MTGBot: Trending Magic Cards'
+msg = [modern_list, expedition_list]
+names = ['Modern', 'Expedition Lands']
+
+send_email(user, app_pass, recp, sub, msg, names)
+
+
+#Refer to line 60 and 69 ;) for changes to your trends
+
+
 #web parser
 def web(page,WebUrl):
     if(page>0):
@@ -100,15 +116,3 @@ def send_email(user, pwd, recipient, subject, body, tags):
         print ('successfully sent the mail')
     except:
         print ("failed to send mail")
-            
-        
-modern_list = web(1,'https://www.mtggoldfish.com/index/modern#paper')
-expedition_list = web(1,'https://www.mtggoldfish.com/index/EXP#paper')
-user = 'youremail@gmail.com'
-app_pass = 'your_google_apps_password'
-recp = 'where_to_send@gmail.com'
-sub = 'MTGBot: Daily Trending Magic Cards'
-msg = [modern_list, expedition_list]
-names = ['Modern', 'Expedition Lands']
-
-send_email(user, app_pass, recp, sub, msg, names)
