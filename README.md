@@ -31,14 +31,14 @@ Magic: The Gathering Trending Card Bot
    
   In the web method you can change the index of "row" to obtain different elements of the list.
    
-  0: Card Name&nbsp;
-  1: Set Name&nbsp;
-  2: Rarity&nbsp;
-  3: Price&nbsp;
-  4: Daily Price Change (+/-)&nbsp;
-  5: Daily Percent Change (+/-)&nbsp;
-  6: Weekly Price Change (+/-)&nbsp;
-  7: Weekly Percent Change (+/-)&nbsp;
+  0: Card Name  
+  1: Set Name  
+  2: Rarity  
+  3: Price  
+  4: Daily Price Change (+/-)  
+  5: Daily Percent Change (+/-)  
+  6: Weekly Price Change (+/-)  
+  7: Weekly Percent Change (+/-)  
 
 ## Future Changes:
 
