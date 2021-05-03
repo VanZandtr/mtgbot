@@ -4,10 +4,11 @@
 import requests
 from bs4 import BeautifulSoup
 import smtplib
-
+from win10toast import ToastNotifier
+import re
 
 #web parser
-def web(page,WebUrl):
+def full_list_request(page,WebUrl):
     if(page>0):
         headers = {'User-Agent': 'Mozilla/5.0'}
         url = WebUrl
@@ -20,7 +21,7 @@ def web(page,WebUrl):
         
         raw_list = [x for x in combinedText if x != '']#removes random empty spaces in list
         
-                front_index = -1
+        front_index = -1
         rear_index = -1
         
         #finding cards from raw html text
@@ -63,6 +64,68 @@ def web(page,WebUrl):
                                       row[4] + '  ' + '\t' + 'Weekly Price Trend: ' + 
                                       row[6]).expandtabs(60))
         return card_list
+
+def single_card_request(page,WebUrl, card_set=None, foil=False):
+    if(page>0):
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        url = WebUrl
+        code = requests.get(url, headers=headers)
+        plain = code.text
+        s = BeautifulSoup(plain, "html.parser")
+        text = (s.text)
+        combinedText = text.splitlines()
+        
+        return_msg = []
+        
+        raw_list = [x for x in combinedText if x != '']#removes random empty spaces in list
+        
+        if len(raw_list) < 4:
+            return_msg.append("Bad url")
+            return return_msg
+            
+        
+        #logic for card set given
+        string_list = [str(x) for x in raw_list]
+        
+        
+        
+        
+        #clean string list
+        for x in string_list:
+            if x == "-":
+                string_list.pop(string_list.index(x))
+
+        temp_list = []
+        
+        for x in string_list:
+            
+            
+            if x == "TCGplayer Market Price":
+                
+                index = string_list.index(x)
+                
+                temp_list.append(string_list[index])
+                temp_list.append(string_list[index + 1])
+                temp_list.append(string_list[index + 2])
+                temp_list.append(string_list[index + 3])
+                temp_list.append(string_list[index + 4])
+                break
+        
+
+        card_name = string_list[0]
+        
+        print(card_name)
+        result = re.findall('\d*\.?\d+', temp_list[2])
+        price = result[0]
+        print(price)
+        print()
+        
+        
+        
+        
+        
+                    
+        #logic for no set name given --> all set prices
              
         
 # Create a function called "chunks" with two arguments, l and n used to group cards with their respective elements
@@ -101,18 +164,37 @@ def send_email(user, pwd, recipient, subject, body, tags):
         print ('successfully sent the mail')
     except:
         print ("failed to send mail")
-        
-modern_list = web(1,'https://www.mtggoldfish.com/index/modern#paper')
-expedition_list = web(1,'https://www.mtggoldfish.com/index/EXP#paper')
 
-user = 'youremail@gmail.com'
-app_pass = 'your_google_apps_password'
-recp = 'where_to_send@gmail.com'
-sub = 'MTGBot: Trending Magic Cards'
-msg = [modern_list, expedition_list]
-names = ['Modern', 'Expedition Lands']
+def popup_msg():
+    toaster = ToastNotifier()
+    toaster.show_toast("Mtg Bot Notification", "test", duration = 10)
+    
+print("Note: Current single card build does not support Extended, Foreign Language, specific land numbers, or other specialty tag cards. Functionality coming soon.")
+    
+#modern_list = full_list_request(1,'https://www.mtggoldfish.com/index/modern#paper')
+#expedition_list = full_list_request(1,'https://www.mtggoldfish.com/index/EXP#paper')
 
-send_email(user, app_pass, recp, sub, msg, names)
+print()
 
+test_url = "https://www.mtggoldfish.com/price/Strixhaven+Mystical+Archive:Foil/Demonic+Tutor-japanese#paper"
+#non-foil good check
+#nf_good_test = single_card_request(1,test_url, "stx")
+
+#foil good check
+f_good_test = single_card_request(1,test_url, "stx", True)
+
+#card with foil, but ask for non-foil
+#f_good_test = single_card_request(1,test_url, "stx")
+
+
+# user = 'youremail@gmail.com'
+# app_pass = 'your_google_apps_password'
+# recp = 'where_to_send@gmail.com'
+# sub = 'MTGBot: Trending Magic Cards'
+# msg = [modern_list, expedition_list]
+# names = ['Modern', 'Expedition Lands']
+#send_email(user, app_pass, recp, sub, msg, names)
+
+popup_msg()
 
 #Refer to line 60 and 69 ;) for changes to your trends ----> these should be the identical
