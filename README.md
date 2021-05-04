@@ -1,4 +1,5 @@
-# mtgbot
+# mtgbot 
+## (NOTICE!! Current version is not usable please use version at:     https://github.com/VanZandtr/mtgbot/commit/15a8802cf50556eb99fc6bcae25cdb2f7ca8ef9b)
 Magic: The Gathering Trending Card Bot
 
 Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/?st=jsnn5qgc&sh=ff0baf93
