@@ -6,9 +6,15 @@ from bs4 import BeautifulSoup
 import smtplib
 from win10toast import ToastNotifier
 import re
+import os.path
+from os import path
+import pandas as pd
+from datetime import date
+from openpyxl import load_workbook
+import sys
 
-#web parser
 def full_list_request(page,WebUrl):
+    
     if(page>0):
         headers = {'User-Agent': 'Mozilla/5.0'}
         url = WebUrl
@@ -65,7 +71,8 @@ def full_list_request(page,WebUrl):
                                       row[6]).expandtabs(60))
         return card_list
 
-def single_card_request(page,WebUrl, card_set=None, foil=False):
+def single_card_request(page,WebUrl):
+    
     if(page>0):
         headers = {'User-Agent': 'Mozilla/5.0'}
         url = WebUrl
@@ -88,47 +95,55 @@ def single_card_request(page,WebUrl, card_set=None, foil=False):
         string_list = [str(x) for x in raw_list]
         
         
-        
-        
         #clean string list
         for x in string_list:
             if x == "-":
                 string_list.pop(string_list.index(x))
-
-        temp_list = []
+        
+        tcg_player_market = []
+        tcg_player_mid = []
         
         for x in string_list:
-            
+            #print(x)
             
             if x == "TCGplayer Market Price":
                 
+                
                 index = string_list.index(x)
                 
-                temp_list.append(string_list[index])
-                temp_list.append(string_list[index + 1])
-                temp_list.append(string_list[index + 2])
-                temp_list.append(string_list[index + 3])
-                temp_list.append(string_list[index + 4])
+                tcg_player_market.append(string_list[index])
+                tcg_player_market.append(string_list[index + 1])
+                tcg_player_market.append(string_list[index + 2])
+                tcg_player_market.append(string_list[index + 3])
+                tcg_player_market.append(string_list[index + 4])
+                break
+            
+            if x == "TCGplayer Mid":
+                index = string_list.index(x)
+                
+                tcg_player_mid.append(string_list[index])
+                tcg_player_mid.append(string_list[index + 1])
+                tcg_player_mid.append(string_list[index + 2])
+                tcg_player_mid.append(string_list[index + 3])
+                tcg_player_mid.append(string_list[index + 4])
                 break
         
-
-        card_name = string_list[0]
         
-        print(card_name)
+        temp_list = []
+        if len(tcg_player_market) != 0:
+            temp_list = tcg_player_market
+        else:
+            temp_list = tcg_player_mid
+        
+        card_name = string_list[0]
         result = re.findall('\d*\.?\d+', temp_list[2])
         price = result[0]
-        print(price)
-        print()
+        return_msg = [card_name, price]
         
+        return return_msg
         
-        
-        
-        
-                    
-        #logic for no set name given --> all set prices
-             
-        
-# Create a function called "chunks" with two arguments, l and n used to group cards with their respective elements
+# Create a function called "chunks" with two arguments, l and n used to group 
+# cards with their respective elements
 def chunks(l, n):
     # For item i in a range that is a length of l,
     for i in range(0, len(l), n):
@@ -164,27 +179,116 @@ def send_email(user, pwd, recipient, subject, body, tags):
         print ('successfully sent the mail')
     except:
         print ("failed to send mail")
-
-def popup_msg():
+        
+#create general popup message
+def popup_msg(header, msg, d):
     toaster = ToastNotifier()
-    toaster.show_toast("Mtg Bot Notification", "test", duration = 10)
+    toaster.show_toast(header, msg, duration = d)
     
+###############################################################################  
+
+
 print("Note: Current single card build does not support Extended, Foreign Language, specific land numbers, or other specialty tag cards. Functionality coming soon.")
+print()
+print("Looking for my_list.txt file...")
+
+run_list = True
+today = date.today()
+column_name = 'Price ' + str(today) + "1"
+
+if path.isfile('my_list.txt') and run_list == True:
+    print("Found list.")
+    print()
+    
+    text_file = open("my_list.txt", "r")
+    list1 = text_file.readlines()
+    
+    card_name_list = []
+    price_list = []
+    for url in list1:
+        ret = single_card_request(1,url)
+        
+        if 'Bad url' in ret:
+            bad_url_index = list1.index(url)
+            popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
+        else:
+            card_name_list.append(ret[0])
+            price_list.append(ret[1])
+    
+    
+    #create excel file if it doesn't exist
+    if path.isfile('demo.xlsx') == False:
+        dict = {'Card name': card_name_list, 'Price ' + str(today): price_list}
+        
+        df = pd.DataFrame(dict)
+        
+        writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
+        df.to_excel(writer, sheet_name='Test ' + str(today), index = False)
+        writer.save()
+        
+    elif path.isfile('demo.xlsx') == True:
+        
+        df = pd.DataFrame({'Card name': card_name_list, column_name: price_list})
+        
+        writer = pd.ExcelWriter('demo.xlsx', engine='openpyxl')
+        
+        # try to open an existing workbook
+        writer.book = load_workbook('demo.xlsx')
+        
+        # copy existing sheets
+        writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
+        
+        # read existing file
+        reader = pd.read_excel(r'demo.xlsx')
+                
+        #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
+        new_card_flag = False
+        for card in card_name_list:
+            if card not in reader.values:
+                new_card_flag = True
+                    
+        #check if column exists
+        if (column_name) not in reader.columns or new_card_flag == True:
+            #create new column
+            reader[column_name] = 'NaN'
+            for index1, row1 in df.iterrows():
+                for index2, row2 in reader.iterrows():
+                    if row1['Card name'] == row2['Card name']:
+                        reader.at[index2, column_name] = row1[column_name]
+                            
+            #check for new cards
+            for card in card_name_list:
+                if card not in reader.values:
+                    reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
+                    
+        else:
+            print("Today is done")
+            sys.exit()
+        
+        #delete file
+        try:
+            writer.close()
+        except:
+            print("Please close the file")
+            popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
+            sys.exit()
+        
+        os.remove('demo.xlsx')
+        
+        #write to file
+        writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
+        reader.to_excel(writer, sheet_name='Main Sheet', index = False)
+        
+        writer.save()
+                
+elif run_list == True:
+    print("no input list found")
+    
+    
+##############################################################################
     
 #modern_list = full_list_request(1,'https://www.mtggoldfish.com/index/modern#paper')
 #expedition_list = full_list_request(1,'https://www.mtggoldfish.com/index/EXP#paper')
-
-print()
-
-test_url = "https://www.mtggoldfish.com/price/Strixhaven+Mystical+Archive:Foil/Demonic+Tutor-japanese#paper"
-#non-foil good check
-#nf_good_test = single_card_request(1,test_url, "stx")
-
-#foil good check
-f_good_test = single_card_request(1,test_url, "stx", True)
-
-#card with foil, but ask for non-foil
-#f_good_test = single_card_request(1,test_url, "stx")
 
 
 # user = 'youremail@gmail.com'
@@ -195,6 +299,8 @@ f_good_test = single_card_request(1,test_url, "stx", True)
 # names = ['Modern', 'Expedition Lands']
 #send_email(user, app_pass, recp, sub, msg, names)
 
-popup_msg()
+#popup_msg()
 
-#Refer to line 60 and 69 ;) for changes to your trends ----> these should be the identical
+
+
+#Refer to line 60 and 69 ;) for changes to your trends
