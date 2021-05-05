@@ -14,16 +14,20 @@ from openpyxl import load_workbook
 import sys
 import random
 
+########################## Global Vars ########################################
 price_lists_names = []
 run_list = True
 today = str(date.today()) + " " +  str(random.randint(0,100))
 my_list_file_name = 'my_list_report.xlsx'
+
+####################### Methods ###############################################
 
 #create general popup message
 def popup_msg(header, msg, d):
     toaster = ToastNotifier()
     toaster.show_toast(header, msg, duration = d)
 
+#Generate a Dataframe of a card list from an MTGGoldfish web scrap
 def full_list_request(page,WebUrl):
     
     if(page>0):
@@ -35,8 +39,8 @@ def full_list_request(page,WebUrl):
         text = (s.text)
         combinedText = text.splitlines()
         
-        
-        raw_list = [x for x in combinedText if x != '']#removes random empty spaces in list
+        #removes random empty spaces in list
+        raw_list = [x for x in combinedText if x != '']
         
         if len(raw_list) < 4:
             popup_msg("MTGBot Error", "Bad url", 10)
@@ -86,6 +90,7 @@ def full_list_request(page,WebUrl):
         df = pd.DataFrame(card_list,columns=['Card Name', 'Test1', 'Test2', 'Test3', 'Test4', 'Test5', 'Test6', 'Test6'])
         return df
 
+#Generate a [Name, Price] list from a MTGGoldfish price page scrap
 def single_card_request(page,WebUrl):
     
     if(page>0):
@@ -159,13 +164,14 @@ def single_card_request(page,WebUrl):
         
 # Create a function called "chunks" with two arguments, l and n used to group 
 # cards with their respective elements
+# helper function from list_method
 def chunks(l, n):
     # For item i in a range that is a length of l,
     for i in range(0, len(l), n):
         # Create an index range for l of n items:
         yield l[i:i+n]
 
-#email sender
+#Generate and send an email
 def send_email(user, pwd, recipient, subject, body, tags):
     FROM = user
     TO = recipient if isinstance(recipient, list) else [recipient]
@@ -197,7 +203,7 @@ def send_email(user, pwd, recipient, subject, body, tags):
         
 
     
-###############################################################################  
+############################# Single Card List Code ###########################
 
 print("Looking for my_list.txt file...")
 
@@ -207,18 +213,20 @@ price_lists = []
 card_name_list = []
 price_list = []
 
-
+#check if my_list exists
 if path.isfile('my_list.txt'):
     print("Found my_list.txt")
     print()
     
+    #check if my_list is empty
     if os.stat('my_list.txt').st_size == 0:
         print("my_list.txt is empty")
+        
     
     text_file = open("my_list.txt", "r")
     my_list = text_file.readlines()
 
-
+#check for bad urls, skip, and give a popup message
 for url in my_list:
     ret = single_card_request(1,url)
     
@@ -230,6 +238,7 @@ for url in my_list:
         card_name_list.append(ret[0])
         price_list.append(ret[1])
 
+#create an excel file if not already made
 if path.isfile(my_list_file_name) == False and len(my_list) != 0:
     dict = {'Card name': card_name_list, 'Price ' + str(today): price_list}
     
@@ -238,7 +247,7 @@ if path.isfile(my_list_file_name) == False and len(my_list) != 0:
     df.to_excel (my_list_file_name, index = False)
     
     
-    
+#Change/append to existing file if found  
 elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
     
     df = pd.DataFrame({'Card name': card_name_list, column_name: price_list})
@@ -271,17 +280,19 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
                 if row1['Card name'] == row2['Card name']:
                     reader.at[index2, column_name] = row1[column_name]
                         
-        #check for new cards
+    #check for new cards
     elif new_card_flag == True:
         for card in card_name_list:
             if card not in reader.values:
                 reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
                 
+    #Don't rerun the same day (unless we have new cards to add)
+    #Note: Older day columns will be filled with NaN or empty spaces       
     else:
         print("Today is done")
         sys.exit()
     
-    #delete file
+    #check if file is open and give popup if so
     try:
         writer.close()
     except:
@@ -289,41 +300,40 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
         popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
         sys.exit()
     
+    #delete file so we can resave cleanly
+    #otherwise formatting is really annoying
     os.remove(my_list_file_name)
     
     #write to file
     writer = pd.ExcelWriter(my_list_file_name, engine='xlsxwriter')
     reader.to_excel(writer, sheet_name='Main Sheet', index = False)
-    
     writer.save()
     
-    
+#############################Large Price Lists Code############################
 
-        
-    
-    
-##############################################################################
-
+#check if price lists are given
 if path.isfile('price_lists.txt'):
     print("Found price_lists.txt")
     print()
     
+    #check if price lists is empty
     if os.stat('price_lists.txt').st_size == 0:
         print("price_lists.txt is empty")
     
     text_file = open("price_lists.txt", "r")
     price_lists = text_file.readlines()
 
+#run all the price lists given in the file
 name_index = 0
 for url in price_lists:
     ret_msg = full_list_request(1,url)
     
+    #remove illegal file characters / format filename
     characters_to_remove = "*./\[]:;|,"
     fn = (str(price_lists_names[name_index]) + today)
     for c in characters_to_remove:
         fn = fn.replace(c, "")
     fn = fn.strip(' \n\t')
-    
     fn = fn + ".xlsx"
     
     ret_msg.to_excel (fn, index = False)
