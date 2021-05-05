@@ -12,6 +12,17 @@ import pandas as pd
 from datetime import date
 from openpyxl import load_workbook
 import sys
+import random
+
+price_lists_names = []
+run_list = True
+today = str(date.today()) + " " +  str(random.randint(0,100))
+my_list_file_name = 'my_list_report.xlsx'
+
+#create general popup message
+def popup_msg(header, msg, d):
+    toaster = ToastNotifier()
+    toaster.show_toast(header, msg, duration = d)
 
 def full_list_request(page,WebUrl):
     
@@ -27,8 +38,14 @@ def full_list_request(page,WebUrl):
         
         raw_list = [x for x in combinedText if x != '']#removes random empty spaces in list
         
+        if len(raw_list) < 4:
+            popup_msg("MTGBot Error", "Bad url", 10)
+            sys.exit()
+        
         front_index = -1
         rear_index = -1
+        
+        price_lists_names.append(str(raw_list[0]))
         
         #finding cards from raw html text
         for i, j in enumerate(raw_list):
@@ -39,10 +56,12 @@ def full_list_request(page,WebUrl):
                 break;
         
         if front_index == -1 or rear_index == -1:
-            print("error in parsing text")
+            popup_msg("MTGBot Error", "Price list parsing error", 10)
+            sys.exit()
         
         #trim up to where cards start and end
         trim = raw_list[front_index + 2:rear_index - 8]
+        
 
         card_map = list(chunks(trim, 8))
         
@@ -58,18 +77,14 @@ def full_list_request(page,WebUrl):
         #Search and create output format
         card_list = [];
         for row in card_map:
+            card_data = []
             if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0: #Checking if Daily change >= 50 cents or if Weekly change is negative (Down Trend)
-                if len(row[0]) != largest_card: 
-                    card_list.append((row[0] + '  ' + '\t' + 'Current Price: ' + 
-                                      row[3] + '  ' + '\t' + 'Daily Price Trend: ' + 
-                                      row[4] + '  ' + '\t' + 'Weekly Price Trend: ' + 
-                                      row[6]).expandtabs(60 + largest_card - len(row[0])))
-                else:
-                    card_list.append((row[0] + '  ' + '\t' + 'Current Price: ' + 
-                                      row[3] + '  ' + '\t' + 'Daily Price Trend: ' + 
-                                      row[4] + '  ' + '\t' + 'Weekly Price Trend: ' + 
-                                      row[6]).expandtabs(60))
-        return card_list
+                for i in range(0, len(row)):
+                    card_data.append(row[i])
+                card_list.append(card_data)
+        
+        df = pd.DataFrame(card_list,columns=['Card Name', 'Test1', 'Test2', 'Test3', 'Test4', 'Test5', 'Test6', 'Test6'])
+        return df
 
 def single_card_request(page,WebUrl):
     
@@ -180,115 +195,140 @@ def send_email(user, pwd, recipient, subject, body, tags):
     except:
         print ("failed to send mail")
         
-#create general popup message
-def popup_msg(header, msg, d):
-    toaster = ToastNotifier()
-    toaster.show_toast(header, msg, duration = d)
+
     
 ###############################################################################  
 
-
-print("Note: Current single card build does not support Extended, Foreign Language, specific land numbers, or other specialty tag cards. Functionality coming soon.")
-print()
 print("Looking for my_list.txt file...")
 
-run_list = True
-today = date.today()
-column_name = 'Price ' + str(today) + "1"
+column_name = 'Price ' + str(today)
+my_list = []
+price_lists = []
+card_name_list = []
+price_list = []
 
-if path.isfile('my_list.txt') and run_list == True:
-    print("Found list.")
+
+if path.isfile('my_list.txt'):
+    print("Found my_list.txt")
     print()
     
+    if os.stat('my_list.txt').st_size == 0:
+        print("my_list.txt is empty")
+    
     text_file = open("my_list.txt", "r")
-    list1 = text_file.readlines()
+    my_list = text_file.readlines()
+
+
+for url in my_list:
+    ret = single_card_request(1,url)
     
-    card_name_list = []
-    price_list = []
-    for url in list1:
-        ret = single_card_request(1,url)
+    if 'Bad url' in ret:
+        bad_url_index = my_list.index(url)
+        popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
         
-        if 'Bad url' in ret:
-            bad_url_index = list1.index(url)
-            popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
-        else:
-            card_name_list.append(ret[0])
-            price_list.append(ret[1])
+    else:
+        card_name_list.append(ret[0])
+        price_list.append(ret[1])
+
+if path.isfile(my_list_file_name) == False and len(my_list) != 0:
+    dict = {'Card name': card_name_list, 'Price ' + str(today): price_list}
+    
+    df = pd.DataFrame(dict)
+    
+    df.to_excel (my_list_file_name, index = False)
     
     
-    #create excel file if it doesn't exist
-    if path.isfile('demo.xlsx') == False:
-        dict = {'Card name': card_name_list, 'Price ' + str(today): price_list}
-        
-        df = pd.DataFrame(dict)
-        
-        writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
-        df.to_excel(writer, sheet_name='Test ' + str(today), index = False)
-        writer.save()
-        
-    elif path.isfile('demo.xlsx') == True:
-        
-        df = pd.DataFrame({'Card name': card_name_list, column_name: price_list})
-        
-        writer = pd.ExcelWriter('demo.xlsx', engine='openpyxl')
-        
-        # try to open an existing workbook
-        writer.book = load_workbook('demo.xlsx')
-        
-        # copy existing sheets
-        writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
-        
-        # read existing file
-        reader = pd.read_excel(r'demo.xlsx')
+    
+elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
+    
+    df = pd.DataFrame({'Card name': card_name_list, column_name: price_list})
+    
+    writer = pd.ExcelWriter(my_list_file_name, engine='openpyxl')
+    
+    # try to open an existing workbook
+    writer.book = load_workbook(my_list_file_name)
+    
+    # copy existing sheets
+    writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
+    
+    # read existing file
+    reader = pd.read_excel(my_list_file_name)
+            
+    #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
+    new_card_flag = False
+    for card in card_name_list:
+        print(card)
+        if card not in reader.values:
+            new_card_flag = True
+            break
                 
-        #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
-        new_card_flag = False
+    #check if column exists
+    if (column_name) not in reader.columns:
+        #create new column
+        reader[column_name] = 'NaN'
+        for index1, row1 in df.iterrows():
+            for index2, row2 in reader.iterrows():
+                if row1['Card name'] == row2['Card name']:
+                    reader.at[index2, column_name] = row1[column_name]
+                        
+        #check for new cards
+    elif new_card_flag == True:
         for card in card_name_list:
             if card not in reader.values:
-                new_card_flag = True
-                    
-        #check if column exists
-        if (column_name) not in reader.columns or new_card_flag == True:
-            #create new column
-            reader[column_name] = 'NaN'
-            for index1, row1 in df.iterrows():
-                for index2, row2 in reader.iterrows():
-                    if row1['Card name'] == row2['Card name']:
-                        reader.at[index2, column_name] = row1[column_name]
-                            
-            #check for new cards
-            for card in card_name_list:
-                if card not in reader.values:
-                    reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
-                    
-        else:
-            print("Today is done")
-            sys.exit()
-        
-        #delete file
-        try:
-            writer.close()
-        except:
-            print("Please close the file")
-            popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
-            sys.exit()
-        
-        os.remove('demo.xlsx')
-        
-        #write to file
-        writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
-        reader.to_excel(writer, sheet_name='Main Sheet', index = False)
-        
-        writer.save()
+                reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
                 
-elif run_list == True:
-    print("no input list found")
+    else:
+        print("Today is done")
+        sys.exit()
+    
+    #delete file
+    try:
+        writer.close()
+    except:
+        print("Please close the file")
+        popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
+        sys.exit()
+    
+    os.remove(my_list_file_name)
+    
+    #write to file
+    writer = pd.ExcelWriter(my_list_file_name, engine='xlsxwriter')
+    reader.to_excel(writer, sheet_name='Main Sheet', index = False)
+    
+    writer.save()
+    
+    
+
+        
     
     
 ##############################################################################
+
+if path.isfile('price_lists.txt'):
+    print("Found price_lists.txt")
+    print()
     
-#modern_list = full_list_request(1,'https://www.mtggoldfish.com/index/modern#paper')
-#expedition_list = full_list_request(1,'https://www.mtggoldfish.com/index/EXP#paper')
+    if os.stat('price_lists.txt').st_size == 0:
+        print("price_lists.txt is empty")
+    
+    text_file = open("price_lists.txt", "r")
+    price_lists = text_file.readlines()
+
+name_index = 0
+for url in price_lists:
+    ret_msg = full_list_request(1,url)
+    
+    characters_to_remove = "*./\[]:;|,"
+    fn = (str(price_lists_names[name_index]) + today)
+    for c in characters_to_remove:
+        fn = fn.replace(c, "")
+    fn = fn.strip(' \n\t')
+    
+    fn = fn + ".xlsx"
+    
+    ret_msg.to_excel (fn, index = False)
+    name_index += 1
+    
 
 
 # user = 'youremail@gmail.com'
