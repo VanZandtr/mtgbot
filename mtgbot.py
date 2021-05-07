@@ -16,11 +16,14 @@ import random
 
 ########################## Global Vars ########################################
 price_lists_names = []
-run_list = True
-today = str(date.today()) + " " +  str(random.randint(0,100))
+today = str(date.today())
 my_list_file_name = 'my_list_report.xlsx'
 
 ####################### Methods ###############################################
+
+#read in settings
+def get_settings():
+    print("needs implementing")
 
 #create general popup message
 def popup_msg(header, msg, d):
@@ -69,15 +72,6 @@ def full_list_request(page,WebUrl):
 
         card_map = list(chunks(trim, 8))
         
-        #finds longest card name ----> help tab spacing slightly by offseting by longest card name
-        largest_card = 0;
-        for row in card_map:
-            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0: #Checking if Daily change >= 50 cents or if Weekly change is negative (Down Trend)
-                if len(row[0]) > largest_card:
-                    largest_card = len(row[0])
-                    print (largest_card)
-                    print(row[0])
-        
         #Search and create output format
         card_list = [];
         for row in card_map:
@@ -87,7 +81,8 @@ def full_list_request(page,WebUrl):
                     card_data.append(row[i])
                 card_list.append(card_data)
         
-        df = pd.DataFrame(card_list,columns=['Card Name', 'Test1', 'Test2', 'Test3', 'Test4', 'Test5', 'Test6', 'Test6'])
+        df = pd.DataFrame(card_list,columns=['Card Name', 'Set Name', 'Rarity', 'Current Price', 'Daily Price Change',
+                                             'Daily Percent Change', 'Weekly Price Change', 'Weekly Percent Change'])
         return df
 
 #Generate a [Name, Price] list from a MTGGoldfish price page scrap
@@ -240,17 +235,20 @@ for url in my_list:
 
 #create an excel file if not already made
 if path.isfile(my_list_file_name) == False and len(my_list) != 0:
-    dict = {'Card name': card_name_list, 'Price ' + str(today): price_list}
-    
-    df = pd.DataFrame(dict)
+    df = pd.DataFrame()
+    df['Card name'] = card_name_list
+    df['Average'] = "N/A"
+    df[column_name] = price_list
     
     df.to_excel (my_list_file_name, index = False)
     
     
 #Change/append to existing file if found  
 elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
-    
-    df = pd.DataFrame({'Card name': card_name_list, column_name: price_list})
+    df = pd.DataFrame()
+    df['Card name'] = card_name_list
+    df['Average'] = 0.00
+    df[column_name] = price_list
     
     writer = pd.ExcelWriter(my_list_file_name, engine='openpyxl')
     
@@ -266,7 +264,6 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
     #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
     new_card_flag = False
     for card in card_name_list:
-        print(card)
         if card not in reader.values:
             new_card_flag = True
             break
@@ -278,7 +275,18 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
         for index1, row1 in df.iterrows():
             for index2, row2 in reader.iterrows():
                 if row1['Card name'] == row2['Card name']:
-                    reader.at[index2, column_name] = row1[column_name]
+                    reader.at[index2, column_name] = float(row1[column_name])
+                    
+        #run statistics
+        for index, row in reader.iterrows():
+            sum_of_prices = 0
+            for col in reader.columns:
+                if col not in ['Card name', 'Average']:
+                    sum_of_prices += float(row[col])
+            reader.at[index, 'Average'] = sum_of_prices/(len(reader.columns) - 2)
+            
+        
+        
                         
     #check for new cards
     elif new_card_flag == True:
@@ -292,6 +300,7 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
         print("Today is done")
         sys.exit()
     
+        
     #check if file is open and give popup if so
     try:
         writer.close()
@@ -349,7 +358,7 @@ for url in price_lists:
 # names = ['Modern', 'Expedition Lands']
 #send_email(user, app_pass, recp, sub, msg, names)
 
-#popup_msg()
+#popup_msg("test", "test")
 
 
 

@@ -1,0 +1,6 @@
+Rarity: Rare
+Price: < 1.00
+Daily Price Change:
+Daily Percent Change:
+Weekly Price Change:
+Weekly Percent Change:
