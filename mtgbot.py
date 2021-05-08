@@ -17,7 +17,7 @@ import random
 ########################## Global Vars ########################################
 price_lists_names = []
 today = str(date.today())
-my_list_file_name = 'my_list_report.xlsx'
+my_list_file_path = '.\\excels\\my_list_report.xlsx'
 
 ####################### Methods ###############################################
 
@@ -234,32 +234,32 @@ for url in my_list:
         price_list.append(ret[1])
 
 #create an excel file if not already made
-if path.isfile(my_list_file_name) == False and len(my_list) != 0:
+if path.isfile(my_list_file_path) == False and len(my_list) != 0:
     df = pd.DataFrame()
     df['Card name'] = card_name_list
     df['Average'] = "N/A"
     df[column_name] = price_list
     
-    df.to_excel (my_list_file_name, index = False)
+    df.to_excel (my_list_file_path, index = False)
     
     
 #Change/append to existing file if found  
-elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
+elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     df = pd.DataFrame()
     df['Card name'] = card_name_list
     df['Average'] = 0.00
     df[column_name] = price_list
     
-    writer = pd.ExcelWriter(my_list_file_name, engine='openpyxl')
+    writer = pd.ExcelWriter(my_list_file_path, engine='openpyxl')
     
     # try to open an existing workbook
-    writer.book = load_workbook(my_list_file_name)
+    writer.book = load_workbook(my_list_file_path)
     
     # copy existing sheets
     writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
     
     # read existing file
-    reader = pd.read_excel(my_list_file_name)
+    reader = pd.read_excel(my_list_file_path)
             
     #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
     new_card_flag = False
@@ -267,6 +267,7 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
         if card not in reader.values:
             new_card_flag = True
             break
+    
                 
     #check if column exists
     if (column_name) not in reader.columns:
@@ -283,6 +284,7 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
             for col in reader.columns:
                 if col not in ['Card name', 'Average']:
                     sum_of_prices += float(row[col])
+            #Average of all days
             reader.at[index, 'Average'] = sum_of_prices/(len(reader.columns) - 2)
             
         
@@ -300,6 +302,8 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
         print("Today is done")
         sys.exit()
     
+    #check if cards were removed from list and delete them from the excel
+    reader = reader.dropna()
         
     #check if file is open and give popup if so
     try:
@@ -311,10 +315,10 @@ elif path.isfile(my_list_file_name) == True and len(my_list) != 0:
     
     #delete file so we can resave cleanly
     #otherwise formatting is really annoying
-    os.remove(my_list_file_name)
+    os.remove(my_list_file_path)
     
     #write to file
-    writer = pd.ExcelWriter(my_list_file_name, engine='xlsxwriter')
+    writer = pd.ExcelWriter(my_list_file_path, engine='xlsxwriter')
     reader.to_excel(writer, sheet_name='Main Sheet', index = False)
     writer.save()
     
@@ -343,7 +347,7 @@ for url in price_lists:
     for c in characters_to_remove:
         fn = fn.replace(c, "")
     fn = fn.strip(' \n\t')
-    fn = fn + ".xlsx"
+    fn = '.\\excels\\' + fn + ".xlsx"
     
     ret_msg.to_excel (fn, index = False)
     name_index += 1
