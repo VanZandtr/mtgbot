@@ -12,7 +12,7 @@ import pandas as pd
 from datetime import date
 from openpyxl import load_workbook
 import sys
-import random
+
 
 ########################## Global Vars ########################################
 price_lists_names = []
@@ -202,7 +202,7 @@ def send_email(user, pwd, recipient, subject, body, tags):
 
 print("Looking for my_list.txt file...")
 
-column_name = 'Price ' + str(today)
+column_name = 'Price ' + str(today) + '5'
 my_list = []
 price_lists = []
 card_name_list = []
@@ -233,6 +233,10 @@ for url in my_list:
         card_name_list.append(ret[0])
         price_list.append(ret[1])
 
+# #check if a temp file exists - do renaming
+# if path.isfile(my_list_file_path_temp) == True
+
+
 #create an excel file if not already made
 if path.isfile(my_list_file_path) == False and len(my_list) != 0:
     df = pd.DataFrame()
@@ -250,16 +254,17 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     df['Average'] = 0.00
     df[column_name] = price_list
     
-    writer = pd.ExcelWriter(my_list_file_path, engine='openpyxl')
+    # writer = pd.ExcelWriter(my_list_file_path, engine='openpyxl')
     
-    # try to open an existing workbook
-    writer.book = load_workbook(my_list_file_path)
+    # # try to open an existing workbook
+    # writer.book = load_workbook(my_list_file_path)
     
-    # copy existing sheets
-    writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
+    # # copy existing sheets
+    # writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
     
     # read existing file
     reader = pd.read_excel(my_list_file_path)
+    print(reader)
             
     #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
     new_card_flag = False
@@ -305,22 +310,19 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     #check if cards were removed from list and delete them from the excel
     reader = reader.dropna()
         
-    #check if file is open and give popup if so
+    
+    #delete file so we can resave cleanly
+    #otherwise formatting is really annoying
     try:
-        writer.close()
+        os.remove(my_list_file_path)
     except:
         print("Please close the file")
         popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
         sys.exit()
-    
-    #delete file so we can resave cleanly
-    #otherwise formatting is really annoying
-    os.remove(my_list_file_path)
+        
     
     #write to file
-    writer = pd.ExcelWriter(my_list_file_path, engine='xlsxwriter')
-    reader.to_excel(writer, sheet_name='Main Sheet', index = False)
-    writer.save()
+    reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
     
 #############################Large Price Lists Code############################
 
