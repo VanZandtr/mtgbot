@@ -29,7 +29,7 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
   
  ## Automation (Windows):
    Refer to link on how to automate a .bat file with Task Scheduler:  
-   https://towardsdatascience.com/how-to-automate-your-python-scripts-for-free-2021-98ac71b0c360
+   https://www.youtube.com/watch?v=n2Cr_YRQk7o
     
  ## Final Product:
  
