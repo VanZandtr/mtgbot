@@ -202,7 +202,7 @@ def send_email(user, pwd, recipient, subject, body, tags):
 
 print("Looking for my_list.txt file...")
 
-column_name = 'Price ' + str(today) + '5'
+column_name = 'Price ' + str(today)
 my_list = []
 price_lists = []
 card_name_list = []
@@ -241,7 +241,8 @@ for url in my_list:
 if path.isfile(my_list_file_path) == False and len(my_list) != 0:
     df = pd.DataFrame()
     df['Card name'] = card_name_list
-    df['Average'] = "N/A"
+    df['Average'] = 0.00
+    df['Daily Change'] = 0.00
     df[column_name] = price_list
     
     df.to_excel (my_list_file_path, index = False)
@@ -253,18 +254,10 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     df['Card name'] = card_name_list
     df['Average'] = 0.00
     df[column_name] = price_list
-    
-    # writer = pd.ExcelWriter(my_list_file_path, engine='openpyxl')
-    
-    # # try to open an existing workbook
-    # writer.book = load_workbook(my_list_file_path)
-    
-    # # copy existing sheets
-    # writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
-    
+    df['Daily Change'] = 0.00
+    ignore_list = ['Card name', 'Average', 'Daily Change']
     # read existing file
     reader = pd.read_excel(my_list_file_path)
-    print(reader)
             
     #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
     new_card_flag = False
@@ -287,10 +280,18 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
         for index, row in reader.iterrows():
             sum_of_prices = 0
             for col in reader.columns:
-                if col not in ['Card name', 'Average']:
+                if col not in ignore_list:
                     sum_of_prices += float(row[col])
-            #Average of all days
-            reader.at[index, 'Average'] = sum_of_prices/(len(reader.columns) - 2)
+            
+            #run statistics only if we have 2 days collected
+            if(len(reader.columns) > (len(ignore_list) + 1)):
+                #Average $ of all days
+                reader.at[index, 'Average'] = sum_of_prices/(len(reader.columns) - 2)
+                
+                #Daily $ change of last 2 days
+                today_column = reader.columns[len(reader.columns) - 1]
+                yesterday_column = reader.columns[len(reader.columns) - 2]
+                reader.at[index, 'Daily Change'] = (row[today_column]) - (row[yesterday_column]) 
             
         
         
@@ -305,6 +306,7 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     #Note: Older day columns will be filled with NaN or empty spaces       
     else:
         print("Today is done")
+        popup_msg("MTGBot", "MTGBot has already run today", 5)
         sys.exit()
     
     #check if cards were removed from list and delete them from the excel
@@ -323,6 +325,7 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     
     #write to file
     reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
+    
     
 #############################Large Price Lists Code############################
 
@@ -365,6 +368,8 @@ for url in price_lists:
 #send_email(user, app_pass, recp, sub, msg, names)
 
 #popup_msg("test", "test")
+
+popup_msg("MTGBot", "Your Daily Report is in!", 5)
 
 
 
