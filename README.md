@@ -28,7 +28,7 @@ Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_tre
   7.) Refer to Additional Options to set trending options
   
  ## Automation (Windows):
-   Refer to link on how to automate a .bat file with Task Scheduler:  
+   Refer to link on how to automate a .py file with Task Scheduler:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
     
  ## Final Product:
