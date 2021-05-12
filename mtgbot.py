@@ -171,7 +171,7 @@ def single_card_request(page,WebUrl):
                 break
             
         if found_seller_flag == False:
-            return_msg.append("Could not find Seller")
+            return_msg.append("Could not find seller")
             return return_msg
         
         
@@ -255,6 +255,10 @@ if path.isfile('my_list.txt'):
 #check for bad urls, skip, and give a popup message
 for url in my_list:
     ret = single_card_request(1,url)
+    
+    if "Could not find seller" in ret:
+        no_seller_index = my_list.index(url)
+        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)    
     
     if 'Bad url' in ret:
         bad_url_index = my_list.index(url)
