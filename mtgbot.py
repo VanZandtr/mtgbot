@@ -117,12 +117,13 @@ def single_card_request(page,WebUrl):
         
         tcg_player_market = []
         tcg_player_mid = []
+        found_seller_flag = False
         
         for x in string_list:
             #print(x)
             
             if x == "TCGplayer Market Price":
-                
+                found_seller_flag = True
                 
                 index = string_list.index(x)
                 
@@ -134,6 +135,8 @@ def single_card_request(page,WebUrl):
                 break
             
             if x == "TCGplayer Mid":
+                found_seller_flag = True
+                
                 index = string_list.index(x)
                 
                 tcg_player_mid.append(string_list[index])
@@ -142,6 +145,34 @@ def single_card_request(page,WebUrl):
                 tcg_player_mid.append(string_list[index + 3])
                 tcg_player_mid.append(string_list[index + 4])
                 break
+            
+            if x == "Card Kingdom":
+                found_seller_flag = True
+                
+                index = string_list.index(x)
+                
+                tcg_player_mid.append(string_list[index])
+                tcg_player_mid.append(string_list[index + 1])
+                tcg_player_mid.append(string_list[index + 2])
+                tcg_player_mid.append(string_list[index + 3])
+                tcg_player_mid.append(string_list[index + 4])
+                break
+            
+            if x == "eBay = Buy It Now":
+                found_seller_flag = True
+                
+                index = string_list.index(x)
+                
+                tcg_player_mid.append(string_list[index])
+                tcg_player_mid.append(string_list[index + 1])
+                tcg_player_mid.append(string_list[index + 2])
+                tcg_player_mid.append(string_list[index + 3])
+                tcg_player_mid.append(string_list[index + 4])
+                break
+            
+        if found_seller_flag == False:
+            return_msg.append("Could not find Seller")
+            return return_msg
         
         
         temp_list = []
@@ -233,9 +264,6 @@ for url in my_list:
         card_name_list.append(ret[0])
         price_list.append(ret[1])
 
-# #check if a temp file exists - do renaming
-# if path.isfile(my_list_file_path_temp) == True
-
 
 #create an excel file if not already made
 if path.isfile(my_list_file_path) == False and len(my_list) != 0:
@@ -286,12 +314,14 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
             #run statistics only if we have 2 days collected
             if(len(reader.columns) > (len(ignore_list) + 1)):
                 #Average $ of all days
-                reader.at[index, 'Average'] = sum_of_prices/(len(reader.columns) - 2)
+                formatted_num = format(sum_of_prices/(len(reader.columns) - 2), '.2f')
+                reader.at[index, 'Average'] = float(formatted_num)
                 
                 #Daily $ change of last 2 days
                 today_column = reader.columns[len(reader.columns) - 1]
                 yesterday_column = reader.columns[len(reader.columns) - 2]
-                reader.at[index, 'Daily Change'] = (row[today_column]) - (row[yesterday_column]) 
+                formatted_num = format((row[today_column]) - (row[yesterday_column]), '.2f')
+                reader.at[index, 'Daily Change'] = float(formatted_num)
             
         
         
@@ -367,10 +397,4 @@ for url in price_lists:
 # names = ['Modern', 'Expedition Lands']
 #send_email(user, app_pass, recp, sub, msg, names)
 
-#popup_msg("test", "test")
-
 popup_msg("MTGBot", "Your Daily Report is in!", 5)
-
-
-
-#Refer to line 60 and 69 ;) for changes to your trends
