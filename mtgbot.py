@@ -158,7 +158,7 @@ def single_card_request(page,WebUrl):
                 tcg_player_mid.append(string_list[index + 4])
                 break
             
-            if x == "eBay = Buy It Now":
+            if x == "eBay - Buy It Now":
                 found_seller_flag = True
                 
                 index = string_list.index(x)
