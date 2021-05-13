@@ -12,6 +12,7 @@ import pandas as pd
 from datetime import date
 from openpyxl import load_workbook
 import sys
+import random
 
 
 ########################## Global Vars ########################################
@@ -231,134 +232,160 @@ def send_email(user, pwd, recipient, subject, body, tags):
     
 ############################# Single Card List Code ###########################
 
-print("Looking for my_list.txt file...")
-
-column_name = 'Price ' + str(today)
-my_list = []
-price_lists = []
-card_name_list = []
-price_list = []
-
-#check if my_list exists
-if path.isfile('my_list.txt'):
-    print("Found my_list.txt")
-    print()
+#delete
+for itr_num in range(1,8):
+    print("Looking for my_list.txt file...")
     
-    #check if my_list is empty
-    if os.stat('my_list.txt').st_size == 0:
-        print("my_list.txt is empty")
+    column_name = 'Price ' + str(today) + ' test '+ str(itr_num)
+    my_list = []
+    price_lists = []
+    card_name_list = []
+    price_list = []
+    
+    #check if my_list exists
+    if path.isfile('my_list.txt'):
+        print("Found my_list.txt")
+        print()
         
-    
-    text_file = open("my_list.txt", "r")
-    my_list = text_file.readlines()
-
-#check for bad urls, skip, and give a popup message
-for url in my_list:
-    ret = single_card_request(1,url)
-    
-    if "Could not find seller" in ret:
-        no_seller_index = my_list.index(url)
-        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)    
-    
-    if 'Bad url' in ret:
-        bad_url_index = my_list.index(url)
-        popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
-        
-    else:
-        card_name_list.append(ret[0])
-        price_list.append(ret[1])
-
-
-#create an excel file if not already made
-if path.isfile(my_list_file_path) == False and len(my_list) != 0:
-    df = pd.DataFrame()
-    df['Card name'] = card_name_list
-    df['Average'] = 0.00
-    df['Daily Change'] = 0.00
-    df[column_name] = price_list
-    
-    df.to_excel (my_list_file_path, index = False)
-    
-    
-#Change/append to existing file if found  
-elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
-    df = pd.DataFrame()
-    df['Card name'] = card_name_list
-    df['Average'] = 0.00
-    df[column_name] = price_list
-    df['Daily Change'] = 0.00
-    ignore_list = ['Card name', 'Average', 'Daily Change']
-    # read existing file
-    reader = pd.read_excel(my_list_file_path)
+        #check if my_list is empty
+        if os.stat('my_list.txt').st_size == 0:
+            print("my_list.txt is empty")
             
-    #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
-    new_card_flag = False
-    for card in card_name_list:
-        if card not in reader.values:
-            new_card_flag = True
-            break
+        
+        text_file = open("my_list.txt", "r")
+        my_list = text_file.readlines()
     
+    #check for bad urls, skip, and give a popup message
+    for url in my_list:
+        ret = single_card_request(1,url)
+        
+        if "Could not find seller" in ret:
+            no_seller_index = my_list.index(url)
+            popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)    
+        
+        if 'Bad url' in ret:
+            bad_url_index = my_list.index(url)
+            popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
+            
+        else:
+            card_name_list.append(ret[0])
+            price_list.append(ret[1])
+    
+    
+    #create an excel file if not already made
+    if path.isfile(my_list_file_path) == False and len(my_list) != 0:
+        df = pd.DataFrame()
+        df['Card name'] = card_name_list
+        df['Average'] = 0.00
+        df['Daily Change'] = 0.00
+        df[column_name] = price_list
+        
+        df.to_excel (my_list_file_path, index = False)
+        
+        
+    #Change/append to existing file if found  
+    elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
+        df = pd.DataFrame()
+        df['Card name'] = card_name_list
+        df['Average'] = 0.00
+        
+        #df[column_name] = price_list
+        
+        
+        
+        
+
+        #test price list
+        #delete
+        test_price_list = [float(x) for x in price_list]
+        test_price_list2 = [x + float(itr_num * random.uniform(1.1, 5.2)) for x in test_price_list]
+        df[column_name] = test_price_list2
+        
+        
+        
+        
+        
+
+        df['Daily Change'] = 0.00
+        
+        ignore_list = ['Card name', 'Average', 'Daily Change']
+        # read existing file
+        reader = pd.read_excel(my_list_file_path)
+        
+        
                 
-    #check if column exists
-    if (column_name) not in reader.columns:
-        #create new column
-        reader[column_name] = 'NaN'
-        for index1, row1 in df.iterrows():
-            for index2, row2 in reader.iterrows():
-                if row1['Card name'] == row2['Card name']:
-                    reader.at[index2, column_name] = float(row1[column_name])
-                    
-        #run statistics
-        for index, row in reader.iterrows():
-            sum_of_prices = 0
-            for col in reader.columns:
-                if col not in ignore_list:
-                    sum_of_prices += float(row[col])
-            
-            #run statistics only if we have 2 days collected
-            if(len(reader.columns) > (len(ignore_list) + 1)):
-                #Average $ of all days
-                formatted_num = format(sum_of_prices/(len(reader.columns) - 2), '.2f')
-                reader.at[index, 'Average'] = float(formatted_num)
-                
-                #Daily $ change of last 2 days
-                today_column = reader.columns[len(reader.columns) - 1]
-                yesterday_column = reader.columns[len(reader.columns) - 2]
-                formatted_num = format((row[today_column]) - (row[yesterday_column]), '.2f')
-                reader.at[index, 'Daily Change'] = float(formatted_num)
-            
-        
-        
-                        
-    #check for new cards
-    elif new_card_flag == True:
+        #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
+        new_card_flag = False
         for card in card_name_list:
             if card not in reader.values:
-                reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
+                new_card_flag = True
+                break
+        
+                    
+        #check if column exists
+        if (column_name) not in reader.columns:
+            #create new column
+            reader[column_name] = 'NaN'
+            for index1, row1 in df.iterrows():
+                for index2, row2 in reader.iterrows():
+                    if row1['Card name'] == row2['Card name']:
+                        reader.at[index2, column_name] = float(row1[column_name])
+                        
+            #run statistics
+            for index, row in reader.iterrows():
+                sum_of_prices = 0
+                for col in reader.columns:
+                    if col not in ignore_list:
+                        sum_of_prices += float(row[col])
                 
-    #Don't rerun the same day (unless we have new cards to add)
-    #Note: Older day columns will be filled with NaN or empty spaces       
-    else:
-        print("Today is done")
-        popup_msg("MTGBot", "MTGBot has already run today", 5)
-        sys.exit()
-    
-    #check if cards were removed from list and delete them from the excel
-    reader = reader.dropna()
+                #run statistics only if we have 2 days collected
+                if(len(reader.columns) > (len(ignore_list) + 1)):
+                    #Average $ of all days
+                    formatted_num = format(sum_of_prices/(len(reader.columns) - len(ignore_list)), '.2f')
+                    reader.at[index, 'Average'] = float(formatted_num)
+                    reader['Average'] = reader['Average'].astype('float64')
+                  
+                    
+                    #Daily $ change of last 2 days
+                    today_column = reader.columns[len(reader.columns) - 1]
+                    yesterday_column = reader.columns[len(reader.columns) - 2]
+                    formatted_num = format((row[today_column]) - (row[yesterday_column]), '.2f')
+                    reader.at[index, 'Daily Change'] = float(formatted_num)
+                    reader['Daily Change'] = reader['Daily Change'].astype('float64')
+                    print(reader['Daily Change'])
+                
+            
+            
+                            
+        #check for new cards
+        elif new_card_flag == True:
+            for card in card_name_list:
+                if card not in reader.values:
+                    reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
+                    
+        #Don't rerun the same day (unless we have new cards to add)
+        #Note: Older day columns will be filled with NaN or empty spaces       
+        else:
+            print("Today is done")
+            popup_msg("MTGBot", "MTGBot has already run today", 5)
+            sys.exit()
         
-    
-    #delete file so we can resave cleanly
-    #otherwise formatting is really annoying
-    try:
-        os.remove(my_list_file_path)
-    except:
-        print("Please close the file")
-        popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
-        sys.exit()
+        #check if cards were removed from list and delete them from the excel
+        reader = reader.dropna()
+            
         
-    
-    #write to file
-    reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
+        #delete file so we can resave cleanly
+        #otherwise formatting is really annoying
+        try:
+            os.remove(my_list_file_path)
+        except:
+            print("Please close the file")
+            popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
+            sys.exit()
+            
+        
+        #write to file
+        reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
     
     
 #############################Large Price Lists Code############################
