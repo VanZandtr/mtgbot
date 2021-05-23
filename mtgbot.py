@@ -13,26 +13,23 @@ from datetime import date
 from openpyxl import load_workbook
 import sys
 import random
+import operator
 
 
 ########################## Global Vars ########################################
+ops = {"<": operator.lt, ">": operator.gt, "<=": operator.le, ">=": operator.ge, "=": operator.eq, "==": operator.eq}
 price_lists_names = []
 today = str(date.today())
 my_list_file_path = '.\\excels\\my_list_report.xlsx'
 
 ####################### Methods ###############################################
 
-#read in settings
-def get_settings():
-    print("needs implementing")
-
-#create general popup message
-def popup_msg(header, msg, d):
-    toaster = ToastNotifier()
-    toaster.show_toast(header, msg, duration = d)
-
 #Generate a Dataframe of a card list from an MTGGoldfish web scrap
-def full_list_request(page,WebUrl):
+def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None, 
+                                    daily_price_change_op= None, daily_price_change= None,
+                                    daily_percent_change_op= None, daily_percent_change= None,
+                                    weekly_price_change_op= None, weekly_price_change= None,
+                                    weekly_percent_change_op= None, weekly_percent_change= None):
     
     if(page>0):
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -42,6 +39,18 @@ def full_list_request(page,WebUrl):
         s = BeautifulSoup(plain, "html.parser")
         text = (s.text)
         combinedText = text.splitlines()
+        
+        print(rarity)
+        print(price_op)
+        print(price)
+        print(daily_price_change_op)
+        print(daily_price_change)
+        print(daily_percent_change_op)
+        print(daily_percent_change)
+        print(weekly_price_change_op)
+        print(weekly_price_change)
+        print(weekly_percent_change_op)
+        print(weekly_percent_change)    
         
         #removes random empty spaces in list
         raw_list = [x for x in combinedText if x != '']
@@ -68,23 +77,250 @@ def full_list_request(page,WebUrl):
             sys.exit()
         
         #trim up to where cards start and end
-        trim = raw_list[front_index + 2:rear_index - 8]
+        trim = raw_list[front_index + 2:rear_index - 7]
         
-
         card_map = list(chunks(trim, 8))
         
         #Search and create output format
         card_list = [];
         for row in card_map:
             card_data = []
-            if float(row[4][:-1]) >= .50 or float(row[6][:-1]) < 0: #Checking if Daily change >= 50 cents or if Weekly change is negative (Down Trend)
-                for i in range(0, len(row)):
-                    card_data.append(row[i])
-                card_list.append(card_data)
+            
+            if rarity:
+                if row[2] != rarity.replace(" ", "") :
+                    continue
+            
+            if price_op and price:
+                if ops[price_op.replace(" ", "")](float(row[3]), float(price.replace(" ", ""))):
+                    pass
+                else:
+                    continue
+                
+            if daily_price_change_op and daily_price_change:
+                if ops[daily_price_change_op.replace(" ", "")](float(row[4].replace("+", "")), float(daily_price_change.replace(" ", ""))):
+                    pass
+                else:
+                    continue
+            
+            if daily_percent_change_op and daily_percent_change:
+                if ops[daily_price_change_op.replace(" ", "")](float(row[5].replace("+", "").replace("%", "")), float(daily_price_change.replace(" ", ""))):
+                    pass
+                else:
+                    continue
+            
+            if weekly_price_change_op and weekly_price_change:
+                if ops[weekly_price_change_op.replace(" ", "")](float(row[6].replace("+", "")), float(weekly_price_change.replace(" ", ""))):
+                    pass
+                else:
+                    continue
+            
+            if weekly_percent_change_op and weekly_percent_change:
+                if ops[weekly_percent_change_op.replace(" ", "")](float(row[7].replace("+", "").replace("%", "")), float(weekly_percent_change.replace(" ", ""))):
+                    pass
+                else:
+                    continue
+            
+            for i in range(0, len(row)):
+                card_data.append(row[i])
+            card_list.append(card_data)
         
         df = pd.DataFrame(card_list,columns=['Card Name', 'Set Name', 'Rarity', 'Current Price', 'Daily Price Change',
                                              'Daily Percent Change', 'Weekly Price Change', 'Weekly Percent Change'])
         return df
+
+#check if price thresholds are met
+def check_price_thresholds(c_list, p_list, s_list, t_list):
+    for i in range(0, len(p_list)):
+        try:
+            curr_price = float(p_list[i])
+            curr_threshold = float(t_list[i])
+        except:
+            continue
+
+        if s_list[i] == '<':
+            if curr_price < curr_threshold:
+                popup_msg("MTGBot Price Alert!", c_list[i] + " is less than "+ t_list[i] + "!", 10)
+        elif s_list[i] == '>':
+            if curr_price > curr_threshold:
+                popup_msg("MTGBot Price Alert!", c_list[i] + " is greater than " + t_list[i] + "!", 10)
+        elif s_list[i] == '=' or s_list[i] == '==':
+            if curr_price == curr_threshold:
+                popup_msg("MTGBot Price Alert!", c_list[i] + " is " + t_list[i] + "!", 10)
+        elif s_list[i] == '>=':
+            if curr_price >= curr_threshold:
+                popup_msg("MTGBot Price Alert!", c_list[i] + " is greater than or equal to " + t_list[i] + "!", 10)
+        elif s_list[i] == '<=':
+            if curr_price <= curr_threshold:
+                popup_msg("MTGBot Price Alert!", c_list[i] + " is less than or equal to " + t_list[i] + "!", 10)
+
+#run price lists with no settings                
+def get_set_list_without_settings():
+    #check if price lists are given
+    if path.isfile('price_lists.txt'):
+        print("Found price_lists.txt")
+        print()
+        
+        #check if price lists is empty
+        if os.stat('price_lists.txt').st_size == 0:
+            print("price_lists.txt is empty")
+        
+        text_file = open("price_lists.txt", "r")
+        price_lists = text_file.readlines()
+    
+    #run all the price lists given in the file
+    name_index = 0
+    for url in price_lists:
+        ret_msg = full_list_request(1,url)
+        
+        #remove illegal file characters / format filename
+        characters_to_remove = "*./\[]:;|,"
+        fn = (str(price_lists_names[name_index]) + today)
+        for c in characters_to_remove:
+            fn = fn.replace(c, "")
+        fn = fn.strip(' \n\t')
+        fn = '.\\excels\\' + fn + ".xlsx"
+        
+        ret_msg.to_excel (fn, index = False)
+        name_index += 1
+        
+
+#run price lists with settings
+def get_set_list_with_settings():
+    if path.isfile('settings.txt'):
+        print("Found settings.txt")
+        print()
+    
+        #check if price lists is empty
+        if os.stat('settings.txt').st_size == 0:
+            print("settings.txt is empty")
+            get_set_list_without_settings()
+            return
+    else:
+        get_set_list_without_settings()
+        return
+        
+    
+    text_file = open("settings.txt", "r")
+    settings_list = text_file.readlines()
+    
+    #remove newlines and split by :
+    settings_list = [i.rstrip() for i in settings_list]
+    settings_list = [i.split(':') for i in settings_list]
+    
+    rarity = ""
+    
+    price_op = ""
+    price = 0.00
+    
+    daily_price_change_op = ""
+    daily_price_change = 0.00
+    
+    daily_percent_change_op = ""
+    daily_percent_change = ""
+    
+    weekly_price_change_op = ""
+    weekly_price_change = 0.00
+    
+    weekly_percent_change_op = ""
+    weekly_percent_change = ""
+    
+    for setting in settings_list:
+        if setting[0] == 'Rarity':
+            if setting[1] != '':
+                rarity = setting[1]
+                
+        elif setting[0] == 'Price':
+            if setting[1] != '':
+                split_list = setting[1].split( )
+                if len(split_list) != 2:
+                    print(split_list)
+                    popup_msg("MTGBot Error", "Bad Price setting. Please make sure format is: \"Price: operator price\" ", 10)
+                    sys.exit()
+                else:
+                    price_op = split_list[0]
+                    price = split_list[1]
+                
+        elif setting[0] == 'Daily Price Change':
+            if setting[1] != '':
+                split_list = setting[1].split( )
+                if len(split_list) != 2:
+                    popup_msg("MTGBot Error", "Bad Daily Price Change setting. Please make sure format is: \"Daily Price Change: operator price\" ", 10)
+                    sys.exit()
+                else:
+                    daily_price_change_op = split_list[0]
+                    daily_price_change = split_list[1]
+                
+        elif setting[0] == 'Daily Percent Change':
+            if setting[1] != '':
+                split_list = setting[1].split( )
+                if len(split_list) != 2:
+                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    sys.exit()
+                else:
+                    daily_percent_change_op = split_list[0]
+                    daily_percent_change = split_list[1]
+                
+        elif setting[0] == 'Weekly Price Change':
+            if setting[1] != '':
+                split_list = setting[1].split( )
+                if len(split_list) != 2:
+                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    sys.exit()
+                else:
+                    weekly_price_change_op = split_list[0]
+                    weekly_price_change = split_list[1]
+                
+        elif setting[0] == 'Weekly Percent Change':
+            if setting[1] != '':
+                split_list = setting[1].split( )
+                if len(split_list) != 2:
+                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    sys.exit()
+                else:
+                    weekly_percent_change_op = split_list[0]
+                    weekly_percent_change = split_list[1]
+            
+            
+    #check if price lists are given
+    if path.isfile('price_lists.txt'):
+        print("Found price_lists.txt")
+        print()
+        
+        #check if price lists is empty
+        if os.stat('price_lists.txt').st_size == 0:
+            print("price_lists.txt is empty")
+        
+        text_file = open("price_lists.txt", "r")
+        price_lists = text_file.readlines()
+    
+    
+    #run all the price lists given in the file
+    name_index = 0
+    for url in price_lists:
+        ret_msg = full_list_request(1,url, rarity, price_op, price, 
+                                    daily_price_change_op, daily_price_change,
+                                    daily_percent_change_op, daily_percent_change,
+                                    weekly_price_change_op, weekly_price_change,
+                                    weekly_percent_change_op, weekly_percent_change)
+        
+        #remove illegal file characters / format filename
+        characters_to_remove = "*./\[]:;|,"
+        fn = (str(price_lists_names[name_index]) + today)
+        for c in characters_to_remove:
+            fn = fn.replace(c, "")
+        fn = fn.strip(' \n\t')
+        fn = '.\\excels\\' + fn + ".xlsx"
+        
+        ret_msg.to_excel (fn, index = False)
+        name_index += 1
+        
+
+#create general popup message
+def popup_msg(header, msg, d):
+    toaster = ToastNotifier()
+    toaster.show_toast(header, msg, duration = d)
+
+
 
 #Generate a [Name, Price] list from a MTGGoldfish price page scrap
 def single_card_request(page,WebUrl):
@@ -255,21 +491,38 @@ if path.isfile('my_list.txt'):
     text_file = open("my_list.txt", "r")
     my_list = text_file.readlines()
 
-#check for bad urls, skip, and give a popup message
+split_mylist = []
 for url in my_list:
-    ret = single_card_request(1,url)
+    split_mylist.append(url.split( ))
+
+#check for bad urls, skip, and give a popup message
+for url in split_mylist:
+    ret = single_card_request(1,url[0])
     
     if "Could not find seller" in ret:
-        no_seller_index = my_list.index(url)
-        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)    
+        no_seller_index = my_list.index(url[0])
+        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
+        sys.exit()
     
-    if 'Bad url' in ret:
-        bad_url_index = my_list.index(url)
+    elif 'Bad url' in ret:
+        bad_url_index = my_list.index(url[0])
         popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
+        sys.exit()
         
     else:
         card_name_list.append(ret[0])
         price_list.append(ret[1])
+
+sign_list = []
+threshold_list = []
+#add values to sign list and threshold list
+for arr in split_mylist:
+    if len(arr) == 3:
+        sign_list.append(arr[1])
+        threshold_list.append(arr[2])
+    else:
+        sign_list.append([])
+        threshold_list.append([])
 
 
 #create an excel file if not already made
@@ -351,8 +604,8 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
                     sum_of_prices += current_val
                     
                     if reader.at[index, 'Highest Price'] == 0.00 or current_val > reader.at[index, 'Highest Price']:
-                         reader.at[index, 'Highest Price'] = current_val
-                         reader['Highest Price'] = reader['Highest Price'].astype('float64')
+                          reader.at[index, 'Highest Price'] = current_val
+                          reader['Highest Price'] = reader['Highest Price'].astype('float64')
                         
                     if reader.at[index, 'Lowest Price'] == 0.00 or current_val < reader.at[index, 'Lowest Price']:
                         reader.at[index, 'Lowest Price'] = current_val
@@ -392,8 +645,8 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
                     print(reader.tail(2))
                     
         if cards_removed_flag == True:
-             print("Card was removed")
-             popup_msg("MTGBot", "Card was removed", 5)
+              print("Card was removed")
+              popup_msg("MTGBot", "Card was removed", 5)
             
                 
     #Don't rerun the same day (unless we have new cards to add)
@@ -424,35 +677,9 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
     
 #############################Large Price Lists Code############################
 
-#check if price lists are given
-if path.isfile('price_lists.txt'):
-    print("Found price_lists.txt")
-    print()
-    
-    #check if price lists is empty
-    if os.stat('price_lists.txt').st_size == 0:
-        print("price_lists.txt is empty")
-    
-    text_file = open("price_lists.txt", "r")
-    price_lists = text_file.readlines()
 
-#run all the price lists given in the file
-name_index = 0
-for url in price_lists:
-    ret_msg = full_list_request(1,url)
     
-    #remove illegal file characters / format filename
-    characters_to_remove = "*./\[]:;|,"
-    fn = (str(price_lists_names[name_index]) + today)
-    for c in characters_to_remove:
-        fn = fn.replace(c, "")
-    fn = fn.strip(' \n\t')
-    fn = '.\\excels\\' + fn + ".xlsx"
-    
-    ret_msg.to_excel (fn, index = False)
-    name_index += 1
-    
-
+get_set_list_with_settings()
 
 # user = 'youremail@gmail.com'
 # app_pass = 'your_google_apps_password'
@@ -462,4 +689,5 @@ for url in price_lists:
 # names = ['Modern', 'Expedition Lands']
 #send_email(user, app_pass, recp, sub, msg, names)
 
+check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
 popup_msg("MTGBot", "Your Daily Report is in!", 5)
