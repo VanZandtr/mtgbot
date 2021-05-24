@@ -41,7 +41,7 @@ This Bot can:
    * Step 4: Run code and find my_list_report excel in /excels  
    (Pic single day)  
    (Pic multi day)  
-   * Note 1: if a price reaches a threshold a pop-up message with be displayed  
+   * Note 1: if a price reaches a threshold a pop-up message will be displayed  
    (Pic)  
    
 ## Price List Setup:
@@ -51,10 +51,8 @@ This Bot can:
    * Step 3: Add threshold values to the setting.txt file (valid operators: <, >, <=, >=, = or ==)(optional)  
    (Pic)  
    * Step 4: Run code and find excel in /excels  
-   * Note 1: if a card does not adhere the settings you provide it will not show up in the excel file  
-   (Pic)  
-   * Note 2: You can have both single cards and lists run at the same time!
-   (Pic)  
+   * Note 1: If a card does not adhere to the settings you provide it will not show up in the excel file  
+   (Pic)   
 
  ## Automation Setup (Windows):
    Refer to link on how to automate a .py file with Task Scheduler:  
@@ -78,6 +76,11 @@ This Bot can:
 ## Future Changes:
 
 ## Preemptive FAQs:
-Q: What mtggoldfish price does the bot use?
+Q1: What mtggoldfish price does the bot use?
+A1:
+
+Q2: Can I run both single cards and multicard lists at the same time?
+A2: Yep!
+(pic)
 
 ## About the Author:
