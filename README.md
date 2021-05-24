@@ -86,7 +86,7 @@ A2: Yep!
 Q3: I see I can only run the single card list once, why?
 A3:
 
-Q4: Why wouldn't I just x site?
-A4: By all means use x site (I probably do too)! I'm sure x site has many advantages and much more color than mine, but the goal here (restating from above) was to create a bot which could keep track of multiple cards and lists simulataneously which would spit out reusable excel sheets and emails all while running in the background. Simply log into your computer and your top level card analytics and notifications are waiting for you!
+Q4: Why wouldn't I just x site?  
+A4: By all means use x site (I probably do too)! I'm sure x site has many advantages and much more color than mine, but the goal here (restating from above) was to create a bot which could keep track of multiple cards and lists simulataneously which would spit out reusable excel sheets and emails all while running in the background. Simply log into your computer and your top level card analytics and notifications are waiting for you!  
 
 ## About the Author:
