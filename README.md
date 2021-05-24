@@ -1,72 +1,74 @@
-# mtgbot 
-## (NOTICE!! Current version is not usable please use version at:     https://github.com/VanZandtr/mtgbot/commit/15a8802cf50556eb99fc6bcae25cdb2f7ca8ef9b)
-Magic: The Gathering Trending Card Bot
-
-Reddit Link: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/?st=jsnn5qgc&sh=ff0baf93
+# Magic: The Gathering Trending Card Bot (M:TGBot)
+## TLDWTR (Too Long Don't Want To Read)
+* Step 1: Download Python
+* Step 2: Download or fork code
+* Step 3: Edit my_list with your single cards and price thresholds (see section #)
+* Step 4: Edit price_lists with your format
+* Step 5: Edit your price_lists thresholds in settings.txt (optional)(see section #)
+* Step 6: Automate your code (optional)(see section #)
+* Step 7: Setup email in email_settings.py (optional)
+* Step 8: Enjoy!
 
 ## Purpose:
    
-   Automate a card popularity script that notices and alerts the user to different price trends based on publicly available price lists, with the goal being that the user will better predict increases/decreases in cards to help the purchasing process.
+Automate a card popularity script that notices and alerts the user to different price trends based on publicly available price lists, with the goal being that the user will better predict increases/decreases in cards to help the purchasing process.
+
+## Intro & Features:
+I had initially started this code twoish years ago and have since added a ton of features! If you are interested in taking a look at the old code you check out the original code here:  https://github.com/VanZandtr/mtgbot/commit/15a8802cf50556eb99fc6bcae25cdb2f7ca8ef9b and the original reddit post here: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/
+
+This Bot can:
+* Track individual cards of any type (extended, foil, promo, etc.) given an MTGGoldfish link
+* Display pop-up messages when an individual cards has reached a certain threshold
+* Track MTGGoldfish set/format price list
+* Track certain set/format list cards based on 6 factors given by MTGGoldfish: Rarity, price, daily price change, daily percent change, weekly price change, weekly percent change
+* Write individual and list cards to seperate excel files
+* Be easily automated into a one touch and down for easy card tracking
+* Email you your price lists
+
+## Single Card Setup:
+   * Step 1: Obtain links to the cards you want to track (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
+   * Step 2: Paste list into my_list.txt making sure each card is on a new line  
+   (Pic)  
+   * Step 3: Add threshold values to the end each card (valid operators: <, >, <=, >=, = or ==)(optional)  
+   (Pic)  
+   * Step 4: Run code and find my_list_report excel in /excels  
+   (Pic single day)  
+   (Pic multi day)  
+   * Note 1: if a price reaches a threshold a pop-up message with be displayed  
+   (Pic)  
    
-## How it Works:
+## Price List Setup:
+   * Step 1: Obtain links to the list you want to track (e.g. https://www.mtggoldfish.com/index/modern#paper)  
+   * Step 2: Paste list into price_lists.txt making sure each list is on a new line  
+   (Pic)  
+   * Step 3: Add threshold values to the setting.txt file (valid operators: <, >, <=, >=, = or ==)(optional)  
+   (Pic)  
+   * Step 4: Run code and find excel in /excels  
+   * Note 1: if a card does not adhere the settings you provide it will not show up in the excel file  
+   (Pic)  
+   * Note 2: You can have both single cards and lists run at the same time!
+   (Pic)  
 
-   mtgbot.py will parse any MTGGoldfish List 
-   (provided that list contains the form https://www.mtggoldfish.com/index/EXP#paper where EXP is a three letter expansion abbreviation or other acceptable list (modern) followed by the ONLINE/PAPER)
-
-## Setup/Use:
-
-  1.) Once you have obtained the cardlist (via restrictions above), paste the url into web method & set vars (my_list = web(1, "url"))  
-  2.) add the vars to "msg" ----> used to add multiple list to a single email  
-  3.) add names of each list in the same order as step 2 to "names"  
-  4.) login into gmail and set recipient email  
-  
-      user: your_gmail@gmail.com
-      app_pass: your_app_password ----> must be using 2 step-verification and add a password via "generate App password (https://support.google.com/accounts/answer/185833?hl=en)
-      recp: where_to_send@gmail.com
-  5.) You MUST also "enable less secure apps" (https://support.google.com/accounts/answer/6010255?hl=en)  
-  6.) run via "python mtgbot.py " or with preferred IDE -----> You may have to install some of the imports used  
-  7.) Refer to Additional Options to set trending options
-  
- ## Automation (Windows):
+ ## Automation Setup (Windows):
    Refer to link on how to automate a .py file with Task Scheduler:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
-    
- ## Final Product:
+   (Add pics)
  
-![mtgbot Email](https://github.com/VanZandtr/mtgbot/blob/master/mtgbot_pic.PNG)
-
- ## Additional Options:
-
-  Note: The current script is parsing the Modern List as well as Zendikar Expeditions as an example.
+ ## Email Setup:
+   (Pending)
    
-  In the web method you can change the index of "row" to obtain different elements of the list.
+ ## Files:
+ * mtgbot.py: main file with all the code
+ * my_list.txt: text file to hold single cards and threshold operators and price values
+ * price_lists.txt: text file to hold multicard lists
+ * settings.txt: text file that holds threshold operators and price/percent values for multicard lists
+ * /excel folder: folder where all the excel files are put from mtgbot.py
+ * /pictures: pictures for this Readme (you can delete this lol)
+ 
+ ## Final Product:
+   (Pending)
   
-  Row[x]  
-  0: Card Name  
-  1: Set Name  
-  2: Rarity  
-  3: Price  
-  4: Daily Price Change (+/-)  
-  5: Daily Percent Change (+/-)  
-  6: Weekly Price Change (+/-)  
-  7: Weekly Percent Change (+/-)  
-  
-  Example:   
-   if float(row[4][:-1]) >= .5 or float(row[6][:-1]) < 0:  
-   
-   * row[4] is the daily price change and float(row[4][:-1]) is saying "take the number at row[4], remove the %/$ and convert it to a number from a string".
-  
-  I currently have it set so that it will return any Daily Price Change >= $.50 OR Weekly Price Change < $0.  
-  Thus, I want to know if a card is starting to take attention or if a high priced card is declining  
-  
-  
-
 ## Future Changes:
 
-   * Indentation Fixes!!!!
-   * Colors and Text Accents (Bold, Italics, etc)
-   * Hold and Compare prices over a certain time period (>week)
-
-## Acknowledgements:
-   https://github.com/matthewlevy97: Automation/Reviewer  
-   https://www.reddit.com/user/PineappleMisfit: License  
+## Preemptive FAQs:
+Q: What mtggoldfish price does the bot use?
