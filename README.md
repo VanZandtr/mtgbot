@@ -79,3 +79,5 @@ This Bot can:
 
 ## Preemptive FAQs:
 Q: What mtggoldfish price does the bot use?
+
+## About the Author:
