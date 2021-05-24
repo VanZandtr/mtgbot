@@ -27,7 +27,7 @@ This Bot can:
 * Track MTGGoldfish set/format price list
 * Track certain set/format list cards based on 6 factors given by MTGGoldfish: Rarity, price, daily price change, daily percent change, weekly price change, weekly percent change
 * Write individual and list cards to seperate excel files
-* Be easily automated into a one touch and down for easy card tracking
+* Be easily automated into background process for "hands off" card tracking
 * Email you your price lists
 * Display pop-up error message to easily trouble shoot your issues
 (pic)
