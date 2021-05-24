@@ -83,4 +83,6 @@ Q2: Can I run both single cards and multicard lists at the same time?
 A2: Yep!
 (pic)
 
+Q3: I see I can only run the single card list once, why?
+Q4:
 ## About the Author:
