@@ -33,36 +33,45 @@ This Bot can:
 (pic)
 
 ## Single Card Setup:
-   * Step 1: Obtain links to the cards you want to track (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
-   * Step 2: Paste list into my_list.txt making sure each card is on a new line  
-   (Pic)  
+   * Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
+   * Step 2: Paste links into my_list.txt making sure each card is on a new line  
    * Step 3: Add threshold values to the end of each card (valid operators: <, >, <=, >=, = or ==)(optional)  
-   (Pic)  
+   <img style="float: left;" src="pics/single_card_list.PNG">
    * Step 4: Run code and find my_list_report excel in /excels  
-   (Pic single day)  
-   (Pic multi day)  
-   * Note 1: if a price reaches a threshold a pop-up message will be displayed  
-   (Pic)  
+   <img style="float: left;" src="pics/single_card_list_1_day.PNG">  
+   * Multi Day (7 Days):<br />
+   (pic needed)<br /> 
+   * Note 1: if a price reaches a threshold a pop-up message will be displayed<br />
+   (Pic)<br />
    
 ## Price List Setup:
-   * Step 1: Obtain links to the list you want to track (e.g. https://www.mtggoldfish.com/index/modern#paper)  
-   * Step 2: Paste list into price_lists.txt making sure each list is on a new line  
-   (Pic)  
+   * Step 1: Obtain links to the lists (e.g. https://www.mtggoldfish.com/index/modern#paper)  
+   * Step 2: Paste links into price_lists.txt making sure each list is on a new line  
+   <img style="float: left;" src="pics/price_lists.PNG">
    * Step 3: Add threshold values to the setting.txt file (valid operators: <, >, <=, >=, = or ==)(optional)  
-   (Pic)  
-   * Step 4: Run code and find excel in /excels  
+   <img style="float: left;" src="pics/settings.PNG">
+   * Step 4: Run code and find excel in /excels
+   <img style="float: left;" src="pics/price_lists_report.PNG">
    * Note 1: If a card does not adhere to the settings you provide it will not show up in the excel file  
-   (Pic)   
+     
 
  ## Automation Setup (Windows):
-   Refer to link on how to automate a .py file with Task Scheduler:  
+   * Step 1: Find your python path with: "python -c "import sys; print(sys.executable)"
+   ![python command](pics/python_command.png)  
+   * Step 2: Create a new task in task manager
+   <img style="float: left;" src="pics/automation_example.png">  
+   * Step 3: Added additional timing settings to task
+   (Need pic)
+   
+   Refer to this link for more information:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
-   (Add pics)
+   
  
  ## Email Setup:
    * Step 1: Enable less secure apps with app passwords (https://support.google.com/accounts/answer/185833?hl=en)
    * Step 2: Edit /files_to_change/email_settings.txt
-   (pic)
+   <img style="float: left;" src="pics/email_settings.PNG">
+   <img style="float: left;" src="pics/sent_email.png">
    
    
  ## Files:
