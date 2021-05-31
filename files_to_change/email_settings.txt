@@ -1,0 +1,4 @@
+user = your_email@gmail.com
+app_pass = your_app_password (e.g. jghfetueesioupa)
+recp = where_to_sent@gmail.com
+sub = your_email_subject_here

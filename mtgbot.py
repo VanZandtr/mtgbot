@@ -14,6 +14,12 @@ from openpyxl import load_workbook
 import sys
 import random
 import operator
+import email, smtplib, ssl
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import time
 
 
 ########################## Global Vars ########################################
@@ -23,6 +29,87 @@ today = str(date.today())
 my_list_file_path = '.\\excels\\my_list_report.xlsx'
 
 ####################### Methods ###############################################
+#Generate and send an email
+def send_email(user, pwd, recipient, subject, body, tags=None):
+    
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = user
+    message["To"] = recipient
+    message["Subject"] = subject
+    
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
+    
+    filename = body  # In same directory as script
+    
+    # Open PDF file in binary mode
+    with open(filename, "rb") as attachment:
+        # Add file as application/octet-stream
+        # Email client can usually download this automatically as attachment
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+    
+    # Encode file in ASCII characters to send by email    
+    encoders.encode_base64(part)
+    
+    # Add header as key/value pair to attachment part
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {filename}",
+    )
+    
+    # Add attachment to message and convert message to string
+    message.attach(part)
+    text = message.as_string()
+    
+    # Log in to server using secure context and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(user, pwd)
+        server.sendmail(user, recipient, text)
+    # except:
+    #     print("error in email")
+    #     return
+
+
+
+
+def get_email_settings():
+    #check if price lists are given
+    if path.isfile('./files_to_change/email_settings.txt'):
+        print("Found email_settings.txt")
+        print()
+    else:
+        print("nope")
+        return
+    
+    #get lines
+    text_file = open("./files_to_change/email_settings.txt", "r")
+    email_lines = text_file.readlines()
+    
+    #remove newlines and split by :
+    email_lines = [i.rstrip() for i in email_lines]
+    
+    
+    counter = 0
+    from_gmail = ""
+    password = ""
+    to_gmail = ""
+    subject = ""
+    for i in email_lines:
+        if counter == 0:
+            from_gmail = i.split('=')[1]
+        elif counter == 1:
+            password = i.split('=')[1]
+        elif counter == 2:
+            to_gmail = i.split('=')[1]
+        elif counter == 3:
+            subject = i.split('=')[1]
+        counter += 1
+            
+    return from_gmail, password, to_gmail, subject
+    
 
 #Generate a Dataframe of a card list from an MTGGoldfish web scrap
 def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None, 
@@ -39,18 +126,6 @@ def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None,
         s = BeautifulSoup(plain, "html.parser")
         text = (s.text)
         combinedText = text.splitlines()
-        
-        print(rarity)
-        print(price_op)
-        print(price)
-        print(daily_price_change_op)
-        print(daily_price_change)
-        print(daily_percent_change_op)
-        print(daily_percent_change)
-        print(weekly_price_change_op)
-        print(weekly_price_change)
-        print(weekly_percent_change_op)
-        print(weekly_percent_change)    
         
         #removes random empty spaces in list
         raw_list = [x for x in combinedText if x != '']
@@ -434,37 +509,6 @@ def chunks(l, n):
         # Create an index range for l of n items:
         yield l[i:i+n]
 
-#Generate and send an email
-def send_email(user, pwd, recipient, subject, body, tags):
-    FROM = user
-    TO = recipient if isinstance(recipient, list) else [recipient]
-    SUBJECT = subject
-    
-    MESSAGE = ''
-    counter = 0;
-    for cardList in body:
-        MESSAGE += tags[counter] + ': \n'
-        MESSAGE += '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n'
-        MESSAGE += '\n'.join(cardList)
-        MESSAGE+= '\n\n'
-        counter +=1
-        
-
-    # Prepare actual message
-    message = """From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (FROM, ", ".join(TO), SUBJECT, MESSAGE)
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.ehlo()
-        server.starttls()
-        server.login(user, pwd)
-        server.sendmail(FROM, TO, message)
-        server.close()
-        print ('successfully sent the mail')
-    except:
-        print ("failed to send mail")
-        
-
     
 ############################# Single Card List Code ###########################
 
@@ -679,15 +723,9 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
 
 
     
-get_set_list_with_settings()
-
-# user = 'youremail@gmail.com'
-# app_pass = 'your_google_apps_password'
-# recp = 'where_to_send@gmail.com'
-# sub = 'MTGBot: Trending Magic Cards'
-# msg = [modern_list, expedition_list]
-# names = ['Modern', 'Expedition Lands']
-#send_email(user, app_pass, recp, sub, msg, names)
-
-check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
+#get_set_list_with_settings()
+u,p,r,s = get_email_settings()
+#time.sleep(5)
+send_email(u, p, r, s, "./excels/my_list_report.xlsx")
+#check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
 popup_msg("MTGBot", "Your Daily Report is in!", 5)
