@@ -60,7 +60,10 @@ This Bot can:
    (Add pics)
  
  ## Email Setup:
-   (Pending)
+   * Step 1: Enable less secure apps with app passwords (https://support.google.com/accounts/answer/185833?hl=en)
+   * Step 2: Edit /files_to_change/email_settings.txt
+   (pic)
+   
    
  ## Files:
  * mtgbot.py: main file with all the code
