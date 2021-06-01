@@ -40,9 +40,9 @@ This Bot can:
    * Step 4: Run code and find my_list_report excel in /excels  
    <img style="float: left;" src="pics/single_card_list_1_day.PNG">  
    * Multi Day (7 Days):<br />
-   (pic needed)<br /> 
+   <img style="float: left;" src="pics/single_card_list_7_days.PNG">
    * Note 1: if a price reaches a threshold a pop-up message will be displayed<br />
-   (Pic)<br />
+   <img style="float: left;" src="pics/single_card_notification.PNG">
    
 ## Price List Setup:
    * Step 1: Obtain links to the lists (e.g. https://www.mtggoldfish.com/index/modern#paper)  
