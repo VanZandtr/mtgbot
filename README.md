@@ -90,7 +90,7 @@ Run "pip install -r requirements.txt" to download all my packages
    
  ## Files:
  * mtgbot.py: main file with all the code
- * my_list.txt: text file to hold single cards and threshold operators and price values
+ * single_card_list.txt: text file to hold single cards and threshold operators and price values
  * price_lists.txt: text file to hold multicard lists
  * settings.txt: text file that holds threshold operators and price/percent values for multicard lists
  * email_settings.txt: file where email information is stored
