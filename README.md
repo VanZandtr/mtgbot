@@ -2,12 +2,13 @@
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
 * Step 2: Download or fork code
-* Step 3: Edit single_card_list.txt with your single cards and price thresholds (see section #)
-* Step 4: Edit price_lists with your format
-* Step 5: Edit your price_lists thresholds in settings.txt (optional)(see section #)
-* Step 6: Automate your code (optional)(see section #)
-* Step 7: Setup email in email_settings.py (optional)
-* Step 8: Enjoy!
+* Step 3: Download pip and run "pip install -r requirements.txt"
+* Step 4: Edit single_card_list.txt with your single cards and price thresholds
+* Step 5: Edit price_lists with your format
+* Step 6: Edit your price_lists thresholds in settings.txt (optional)
+* Step 7: Automate your code (optional)
+* Step 8: Setup email in email_settings.py (optional)
+* Step 9: Enjoy!
 
 ## Purpose and Goals:
    
@@ -32,6 +33,18 @@ This Bot can:
 * Display pop-up error message to easily trouble shoot your issues
 <img style="float: left;" src="pics/error_message.PNG">
 
+# Intial setup:
+
+## Python
+Download Python here: https://www.python.org/downloads/
+
+## pip
+pip is a package manager for Python and allows my program to use complex libraries for sending emails, editing excels, etc.
+Download pip here if it doesn't come with your python download: https://pip.pypa.io/en/stable/installing/
+
+Run "pip install -r requirements.txt" to download all my packages
+
+# Lists setup and usage:
 ## Single Card Setup:
    * Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
    * Step 2: Paste links into single_card_list.txt making sure each card is on a new line  
