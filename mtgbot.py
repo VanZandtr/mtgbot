@@ -235,15 +235,15 @@ def check_price_thresholds(c_list, p_list, s_list, t_list):
 #run price lists with no settings                
 def get_set_list_without_settings():
     #check if price lists are given
-    if path.isfile('price_lists.txt'):
+    if path.isfile('./files_to_change/price_lists.txt'):
         print("Found price_lists.txt")
         print()
         
         #check if price lists is empty
-        if os.stat('price_lists.txt').st_size == 0:
+        if os.stat('./files_to_change/price_lists.txt').st_size == 0:
             print("price_lists.txt is empty")
         
-        text_file = open("price_lists.txt", "r")
+        text_file = open("./files_to_change/price_lists.txt", "r")
         price_lists = text_file.readlines()
     
     #run all the price lists given in the file
@@ -265,12 +265,12 @@ def get_set_list_without_settings():
 
 #run price lists with settings
 def get_set_list_with_settings():
-    if path.isfile('settings.txt'):
+    if path.isfile('./files_to_change/settings.txt'):
         print("Found settings.txt")
         print()
     
         #check if price lists is empty
-        if os.stat('settings.txt').st_size == 0:
+        if os.stat('./files_to_change/settings.txt').st_size == 0:
             print("settings.txt is empty")
             get_set_list_without_settings()
             return
@@ -279,7 +279,7 @@ def get_set_list_with_settings():
         return
         
     
-    text_file = open("settings.txt", "r")
+    text_file = open("./files_to_change/settings.txt", "r")
     settings_list = text_file.readlines()
     
     #remove newlines and split by :
@@ -361,15 +361,15 @@ def get_set_list_with_settings():
             
             
     #check if price lists are given
-    if path.isfile('price_lists.txt'):
+    if path.isfile('./files_to_change/price_lists.txt'):
         print("Found price_lists.txt")
         print()
         
         #check if price lists is empty
-        if os.stat('price_lists.txt').st_size == 0:
+        if os.stat('./files_to_change/price_lists.txt').st_size == 0:
             print("price_lists.txt is empty")
         
-        text_file = open("price_lists.txt", "r")
+        text_file = open("./files_to_change/price_lists.txt", "r")
         price_lists = text_file.readlines()
     
     
@@ -522,16 +522,16 @@ card_name_list = []
 price_list = []
 
 #check if my_list exists
-if path.isfile('single_card_list.txt'):
+if path.isfile('./files_to_change/single_card_list.txt'):
     print("Found single_card_list.txt")
     print()
     
     #check if my_list is empty
-    if os.stat('single_card_list.txt').st_size == 0:
+    if os.stat('./files_to_change/single_card_list.txt').st_size == 0:
         print("single_card_list.txt is empty")
         
     
-    text_file = open("single_card_list.txt", "r")
+    text_file = open("./files_to_change/single_card_list.txt", "r")
     my_list = text_file.readlines()
 
 split_mylist = []
