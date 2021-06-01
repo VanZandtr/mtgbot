@@ -60,8 +60,8 @@ This Bot can:
    ![python command](pics/python_command.png)  
    * Step 2: Create a new task in task manager
    <img style="float: left;" src="pics/automation_example.png">  
-   * Step 3: Added additional timing settings to task
-   (Need pic)
+   * Step 3: Add additional timing settings to task
+   <img style="float: left;" src="pics/automation_settings.png">
    
    Refer to this link for more information:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
