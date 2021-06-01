@@ -117,3 +117,8 @@ A4: By all means use those sites (I probably do too)! I'm sure every one of thos
 
 Q5: I have an issue, question, or suggestion.  
 A5: No problem! Feel free to direct message me on reddit at /u/Albus_Lupi. Thanks for taking a look!
+
+# Contributors & Testers:
+## Get your name here! Take the poll at: xxxxxxxxx
+
+/u/your_reddit_name_here_pog
