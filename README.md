@@ -1,4 +1,4 @@
-# Magic: The Gathering Finance Card Bot (M:TGFBot)
+# Magic: The Gathering Finance Bot (M:TGFBot)
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
 * Step 2: Download or fork code
