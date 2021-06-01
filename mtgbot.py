@@ -76,7 +76,7 @@ def send_email(user, pwd, recipient, subject, body, tags=None):
             server.login(user, pwd)
             server.sendmail(user, recipient, text)
     except:
-        popup_msg("MTGBot Error:", "Error sending email. Please recheck email_settings.txt file", 10)
+        popup_msg("M:TGFBot Error:", "Error sending email. Please recheck email_settings.txt file", 10)
         return
 
 
@@ -85,7 +85,7 @@ def get_email_settings():
     if path.isfile('./files_to_change/email_settings.txt'):
         pass
     else:
-        popup_msg("MTGBot Error:", "Error getting email detatils. Please redownload email_settings.txt file", 10)
+        popup_msg("M:TGFBot Error:", "Error getting email detatils. Please redownload email_settings.txt file", 10)
         return
     
     #get lines
@@ -135,7 +135,7 @@ def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None,
         raw_list = [x for x in combinedText if x != '']
         
         if len(raw_list) < 4:
-            popup_msg("MTGBot Error", "Bad url", 10)
+            popup_msg("M:TGFBot Error", "Bad url", 10)
             sys.exit()
         
         front_index = -1
@@ -152,7 +152,7 @@ def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None,
                 break;
         
         if front_index == -1 or rear_index == -1:
-            popup_msg("MTGBot Error", "Price list parsing error", 10)
+            popup_msg("M:TGFBot Error", "Price list parsing error", 10)
             sys.exit()
         
         #trim up to where cards start and end
@@ -218,19 +218,19 @@ def check_price_thresholds(c_list, p_list, s_list, t_list):
 
         if s_list[i] == '<':
             if curr_price < curr_threshold:
-                popup_msg("MTGBot Price Alert!", c_list[i] + " is less than "+ t_list[i] + "!", 10)
+                popup_msg("M:TGFBot Price Alert!", c_list[i] + " is less than "+ t_list[i] + "!", 10)
         elif s_list[i] == '>':
             if curr_price > curr_threshold:
-                popup_msg("MTGBot Price Alert!", c_list[i] + " is greater than " + t_list[i] + "!", 10)
+                popup_msg("M:TGFBot Price Alert!", c_list[i] + " is greater than " + t_list[i] + "!", 10)
         elif s_list[i] == '=' or s_list[i] == '==':
             if curr_price == curr_threshold:
-                popup_msg("MTGBot Price Alert!", c_list[i] + " is " + t_list[i] + "!", 10)
+                popup_msg("M:TGFBot Price Alert!", c_list[i] + " is " + t_list[i] + "!", 10)
         elif s_list[i] == '>=':
             if curr_price >= curr_threshold:
-                popup_msg("MTGBot Price Alert!", c_list[i] + " is greater than or equal to " + t_list[i] + "!", 10)
+                popup_msg("M:TGFBot Price Alert!", c_list[i] + " is greater than or equal to " + t_list[i] + "!", 10)
         elif s_list[i] == '<=':
             if curr_price <= curr_threshold:
-                popup_msg("MTGBot Price Alert!", c_list[i] + " is less than or equal to " + t_list[i] + "!", 10)
+                popup_msg("M:TGFBot Price Alert!", c_list[i] + " is less than or equal to " + t_list[i] + "!", 10)
 
 #run price lists with no settings                
 def get_set_list_without_settings():
@@ -313,7 +313,7 @@ def get_set_list_with_settings():
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
                     print(split_list)
-                    popup_msg("MTGBot Error", "Bad Price setting. Please make sure format is: \"Price: operator price\" ", 10)
+                    popup_msg("M:TGFBot Error", "Bad Price setting. Please make sure format is: \"Price: operator price\" ", 10)
                     sys.exit()
                 else:
                     price_op = split_list[0]
@@ -323,7 +323,7 @@ def get_set_list_with_settings():
             if setting[1] != '':
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
-                    popup_msg("MTGBot Error", "Bad Daily Price Change setting. Please make sure format is: \"Daily Price Change: operator price\" ", 10)
+                    popup_msg("M:TGFBot Error", "Bad Daily Price Change setting. Please make sure format is: \"Daily Price Change: operator price\" ", 10)
                     sys.exit()
                 else:
                     daily_price_change_op = split_list[0]
@@ -333,7 +333,7 @@ def get_set_list_with_settings():
             if setting[1] != '':
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
-                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    popup_msg("M:TGFBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
                     sys.exit()
                 else:
                     daily_percent_change_op = split_list[0]
@@ -343,7 +343,7 @@ def get_set_list_with_settings():
             if setting[1] != '':
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
-                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    popup_msg("M:TGFBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
                     sys.exit()
                 else:
                     weekly_price_change_op = split_list[0]
@@ -353,7 +353,7 @@ def get_set_list_with_settings():
             if setting[1] != '':
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
-                    popup_msg("MTGBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
+                    popup_msg("M:TGFBot Error", "Bad Daily Percent Change setting. Please make sure format is: \"Daily Percent Change: operator price\" ", 10)
                     sys.exit()
                 else:
                     weekly_percent_change_op = split_list[0]
@@ -544,12 +544,12 @@ for url in split_mylist:
     
     if "Could not find seller" in ret:
         no_seller_index = my_list.index(url[0])
-        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
+        popup_msg("M:TGFBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
         sys.exit()
     
     elif 'Bad url' in ret:
         bad_url_index = my_list.index(url[0])
-        popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
+        popup_msg("M:TGFBot Error", "Bad Url at: " + str(bad_url_index), 5)
         sys.exit()
         
     else:
@@ -689,14 +689,14 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
                     
         if cards_removed_flag == True:
               print("Card was removed")
-              popup_msg("MTGBot", "Card was removed", 5)
+              popup_msg("M:TGFBot", "Card was removed", 5)
             
                 
     #Don't rerun the same day (unless we have new cards to add)
     #Note: Older day columns will be filled with NaN or empty spaces       
     else:
         print("Today is done")
-        popup_msg("MTGBot", "MTGBot has already run today", 5)
+        popup_msg("M:TGFBot", "M:TGFBot has already run today", 5)
         sys.exit()
     
     
@@ -708,7 +708,7 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
         os.remove(my_list_file_path)
     except:
         print("Please close the file")
-        popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
+        popup_msg("M:TGFBot Error: Exiting", "Please close the excel sheet and rerun", 5)
         sys.exit()
         
     
@@ -727,4 +727,4 @@ u,p,r,s = get_email_settings()
 time.sleep(5)
 send_email(u, p, r, s, "./excels/single_card_list_report.xlsx")
 check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
-popup_msg("MTGBot", "Your Daily Report is in!", 5)
+popup_msg("M:TGFBot", "Your Daily Report is in!", 5)
