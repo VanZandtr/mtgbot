@@ -14,12 +14,12 @@
 Automate a card popularity script that tracks and alerts the user to different price trends based on publicly available price lists and cards, with the goal being that the user will better predict increases/decreases in cards to help the purchasing process.
 
 * Goal 1: Make tracking as streamline, easy to understand, and hands off as possible. Anybody, regardless of coding history, should be able to setup this script fully automated in 5-10 mins (you shouldn't have to ever look at code!)
-* Goal 2: Provide a free to use  all-in-one service that magic players or investors can use to realiably, efficiently, and sensibly track their current collection or potential purchases
+* Goal 2: Provide a free to use "all-in-one" service that magic players or investors can use to realiably, efficiently, and sensibly track their current collection or potential purchases
 
 Please feel free to dm if you feel I can improve upon either of these goals.
 
 ## Intro & Features:
-I had initially started this code twoish years ago and have since added a ton of features! If you are interested in taking a look at the old code you check out the original code here:  https://github.com/VanZandtr/mtgbot/commit/15a8802cf50556eb99fc6bcae25cdb2f7ca8ef9b and the original reddit post here: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/
+I had initially started this code around two years ago and have since added a ton of features! If you are interested in taking a look at the old code you check out the original code here:  https://github.com/VanZandtr/mtgbot/commit/15a8802cf50556eb99fc6bcae25cdb2f7ca8ef9b and the original reddit post here: https://www.reddit.com/r/mtgfinance/comments/avhbpa/i_created_a_trending_bot/
 
 This Bot can:
 * Track individual cards of any type (extended, foil, promo, etc.) given an MTGGoldfish link
@@ -30,7 +30,7 @@ This Bot can:
 * Be easily automated into background process for "hands off" card tracking
 * Email you your price lists
 * Display pop-up error message to easily trouble shoot your issues
-(pic)
+<img style="float: left;" src="pics/error_message.PNG">
 
 ## Single Card Setup:
    * Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
@@ -92,13 +92,13 @@ Q1: What mtggoldfish price does the bot use?
 A1: The Bot will try TCGPlayer Market first, then TCGPlayer Mid, then Card Kingdom, then eBay Buy It Now. Cards will not show some of these values if none exist for them, thus the need for "waterfall" style check system. I could add all in the future, but for now this is a bit cleaner.  
 
 Q2: Can I run both single cards and multicard lists at the same time?  
-A2: Yep!  
-(pic)
+A2: Yep!
 
 Q3: I see I can only run the single card list once, why?  
-A3:  
+A3: This is an intentional by design as MTGGoldfish doesn't update their prices but once a day. However if you remove or add a new card/price list to your lists you can rerun your program without the "Already ran today" message. 
 
-Q4: Why wouldn't I just use site x,y, or z?  
+Q4: Why wouldn't I just use site x, y, or z?  
 A4: By all means use those sites (I probably do too)! I'm sure every one of those sites has advantages over (and much more color than) mine, but the goal here (restating from above) was to create a bot which could keep track of multiple cards and lists simulataneously which would spit out reusable excel sheets and emails all while running in the background. Simply log into your computer and your top level card analytics and notifications are already running!  
 
-## About the Author:
+Q5: I have an issue, question, or suggestion.  
+A5: No problem! Feel free to direct message me on reddit at /u/Albus_Lupi. Thanks for taking a look!
