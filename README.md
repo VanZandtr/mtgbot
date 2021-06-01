@@ -2,7 +2,7 @@
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
 * Step 2: Download or fork code
-* Step 3: Edit my_list with your single cards and price thresholds (see section #)
+* Step 3: Edit single_card_list.txt with your single cards and price thresholds (see section #)
 * Step 4: Edit price_lists with your format
 * Step 5: Edit your price_lists thresholds in settings.txt (optional)(see section #)
 * Step 6: Automate your code (optional)(see section #)
@@ -34,7 +34,7 @@ This Bot can:
 
 ## Single Card Setup:
    * Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
-   * Step 2: Paste links into my_list.txt making sure each card is on a new line  
+   * Step 2: Paste links into single_card_list.txt making sure each card is on a new line  
    * Step 3: Add threshold values to the end of each card (valid operators: <, >, <=, >=, = or ==)(optional)  
    <img style="float: left;" src="pics/single_card_list.PNG">
    * Step 4: Run code and find my_list_report excel in /excels  
