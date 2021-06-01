@@ -54,7 +54,8 @@ Run "pip install -r requirements.txt" to download all my packages
    <img style="float: left;" src="pics/single_card_list_1_day.PNG">  
    * Multi Day (7 Days):<br />
    <img style="float: left;" src="pics/single_card_list_7_days.PNG">
-   * Note 1: if a price reaches a threshold a pop-up message will be displayed<br />
+   * Note 1: The above prices are mocked to demo a week of running the code (tinder wall is not a 3$ card)<br />
+   * Note 2: if a price reaches a threshold a pop-up message will be displayed<br />
    <img style="float: left;" src="pics/single_card_notification.PNG">
    
 ## Price List Setup:
