@@ -1,4 +1,5 @@
-# Magic: The Gathering Finance Bot (M:TGFBot)
+ # <img style="float: left;" src="pics/title.png">
+
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
 * Step 2: Download or fork code
