@@ -79,24 +79,24 @@ This Bot can:
  * my_list.txt: text file to hold single cards and threshold operators and price values
  * price_lists.txt: text file to hold multicard lists
  * settings.txt: text file that holds threshold operators and price/percent values for multicard lists
+ * email_settings.txt: file where email information is stored
  * /excel folder: folder where all the excel files are put from mtgbot.py
- * /pictures: pictures for this Readme (you can delete this lol)
- 
- ## Final Product:
-   (Pending)
+ * /pics: pictures for this Readme (you can delete this lol)
+ * /files_to_change: all files the user can/should change
   
 ## Future Changes:
+(Determined by poll tbd)
 
 ## Preemptive FAQs:
-Q1: What mtggoldfish price does the bot use?
-A1:
+Q1: What mtggoldfish price does the bot use?  
+A1: The Bot will try TCGPlayer Market first, then TCGPlayer Mid, then Card Kingdom, then eBay Buy It Now. Cards will not show some of these values if none exist for them, thus the need for "waterfall" style check system. I could add all in the future, but for now this is a bit cleaner.  
 
-Q2: Can I run both single cards and multicard lists at the same time?
-A2: Yep!
+Q2: Can I run both single cards and multicard lists at the same time?  
+A2: Yep!  
 (pic)
 
-Q3: I see I can only run the single card list once, why?
-A3:
+Q3: I see I can only run the single card list once, why?  
+A3:  
 
 Q4: Why wouldn't I just use site x,y, or z?  
 A4: By all means use those sites (I probably do too)! I'm sure every one of those sites has advantages over (and much more color than) mine, but the goal here (restating from above) was to create a bot which could keep track of multiple cards and lists simulataneously which would spit out reusable excel sheets and emails all while running in the background. Simply log into your computer and your top level card analytics and notifications are already running!  
