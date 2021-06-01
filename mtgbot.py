@@ -26,62 +26,66 @@ import time
 ops = {"<": operator.lt, ">": operator.gt, "<=": operator.le, ">=": operator.ge, "=": operator.eq, "==": operator.eq}
 price_lists_names = []
 today = str(date.today())
-my_list_file_path = '.\\excels\\my_list_report.xlsx'
+my_list_file_path = '.\\excels\\single_card_list_report.xlsx'
 
 ####################### Methods ###############################################
+
+#create general popup message
+def popup_msg(header, msg, d):
+    toaster = ToastNotifier()
+    toaster.show_toast(header, msg, duration = d)
+
 #Generate and send an email
 def send_email(user, pwd, recipient, subject, body, tags=None):
     
-    # Create a multipart message and set headers
-    message = MIMEMultipart()
-    message["From"] = user
-    message["To"] = recipient
-    message["Subject"] = subject
-    
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
-    
-    filename = body  # In same directory as script
-    
-    # Open PDF file in binary mode
-    with open(filename, "rb") as attachment:
-        # Add file as application/octet-stream
-        # Email client can usually download this automatically as attachment
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(attachment.read())
-    
-    # Encode file in ASCII characters to send by email    
-    encoders.encode_base64(part)
-    
-    # Add header as key/value pair to attachment part
-    part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {filename}",
-    )
-    
-    # Add attachment to message and convert message to string
-    message.attach(part)
-    text = message.as_string()
-    
-    # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login(user, pwd)
-        server.sendmail(user, recipient, text)
-    # except:
-    #     print("error in email")
-    #     return
-
-
+    try:
+        # Create a multipart message and set headers
+        message = MIMEMultipart()
+        message["From"] = user
+        message["To"] = recipient
+        message["Subject"] = subject
+        
+        # Add body to email
+        message.attach(MIMEText(body, "plain"))
+        
+        filename = body  # In same directory as script
+        
+        # Open PDF file in binary mode
+        with open(filename, "rb") as attachment:
+            # Add file as application/octet-stream
+            # Email client can usually download this automatically as attachment
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
+        
+        # Encode file in ASCII characters to send by email    
+        encoders.encode_base64(part)
+        
+        # Add header as key/value pair to attachment part
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename= {filename}",
+        )
+        
+        # Add attachment to message and convert message to string
+        message.attach(part)
+        text = message.as_string()
+        
+        # Log in to server using secure context and send email
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(user, pwd)
+            server.sendmail(user, recipient, text)
+    except:
+        popup_msg("MTGBot Error:", "Error sending email. Please recheck email_settings.txt file", 10)
+        return
 
 
 def get_email_settings():
     #check if price lists are given
     if path.isfile('./files_to_change/email_settings.txt'):
-        print("Found email_settings.txt")
-        print()
+        pass
     else:
-        print("nope")
+        popup_msg("MTGBot Error:", "Error getting email detatils. Please redownload email_settings.txt file", 10)
         return
     
     #get lines
@@ -388,12 +392,6 @@ def get_set_list_with_settings():
         
         ret_msg.to_excel (fn, index = False)
         name_index += 1
-        
-
-#create general popup message
-def popup_msg(header, msg, d):
-    toaster = ToastNotifier()
-    toaster.show_toast(header, msg, duration = d)
 
 
 
@@ -512,220 +510,220 @@ def chunks(l, n):
     
 ############################# Single Card List Code ###########################
 
-#for test_day in range(0,7):
-print("Looking for my_list.txt file...")
-#column_name = 'Price ' + str(today) + str(test_day)
-
-column_name = 'Price ' + str(today)
-my_list = []
-price_lists = []
-card_name_list = []
-price_list = []
-
-#check if my_list exists
-if path.isfile('my_list.txt'):
-    print("Found my_list.txt")
-    print()
+for test_day in range(0,7):
+    print("Looking for single_card_list.txt file...")
+    column_name = 'Price ' + str(today) + str(test_day)
     
-    #check if my_list is empty
-    if os.stat('my_list.txt').st_size == 0:
-        print("my_list.txt is empty")
+    #column_name = 'Price ' + str(today)
+    my_list = []
+    price_lists = []
+    card_name_list = []
+    price_list = []
+    
+    #check if my_list exists
+    if path.isfile('single_card_list.txt'):
+        print("Found single_card_list.txt")
+        print()
         
-    
-    text_file = open("my_list.txt", "r")
-    my_list = text_file.readlines()
-
-split_mylist = []
-for url in my_list:
-    split_mylist.append(url.split( ))
-
-#check for bad urls, skip, and give a popup message
-for url in split_mylist:
-    ret = single_card_request(1,url[0])
-    
-    if "Could not find seller" in ret:
-        no_seller_index = my_list.index(url[0])
-        popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
-        sys.exit()
-    
-    elif 'Bad url' in ret:
-        bad_url_index = my_list.index(url[0])
-        popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
-        sys.exit()
-        
-    else:
-        card_name_list.append(ret[0])
-        price_list.append(ret[1])
-
-sign_list = []
-threshold_list = []
-#add values to sign list and threshold list
-for arr in split_mylist:
-    if len(arr) == 3:
-        sign_list.append(arr[1])
-        threshold_list.append(arr[2])
-    else:
-        sign_list.append([])
-        threshold_list.append([])
-
-
-#create an excel file if not already made
-if path.isfile(my_list_file_path) == False and len(my_list) != 0:
-    df = pd.DataFrame()
-    df['Card name'] = card_name_list
-    df['Average'] = 0.00
-    df['Weekly Change'] = 0.00
-    df['Daily Change'] = 0.00
-    df['Lowest Price'] = 0.00
-    df['Highest Price'] = 0.00
-    
-    converted_price_list = [float(i) for i in price_list]
-    df[column_name] = converted_price_list
-    
-    #add total row       
-    df.at['Total', column_name] = df[column_name].sum()
-    
-    df.to_excel (my_list_file_path, index = False)
-    
-    
-#Change/append to existing file if found  
-elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
-    df = pd.DataFrame()
-    df['Card name'] = card_name_list
-    df['Average'] = 0.00    
-    df['Weekly Change'] = 0.00
-    df['Daily Change'] = 0.00
-    df['Lowest Price'] = 0.00
-    df['Highest Price'] = 0.00
-    
-    converted_price_list = [float(i) for i in price_list]
-    df[column_name] = converted_price_list
-    
-    ignore_list = ['Card name', 'Average', 'Daily Change', 'Weekly Change', 'Lowest Price', 'Highest Price']
-    # read existing file
-    reader = pd.read_excel(my_list_file_path)
-    
-    #remove totals row
-    reader.drop(reader.tail(1).index,inplace=True)
-    
-    #check if any cards were removed
-    cards_removed_flag = False
-    for value in reader['Card name'].values:
-        if value not in card_name_list:
-            print("Not found:", value)
-            reader = reader[~reader['Card name'].isin([value])]
-            cards_removed_flag = True
-
-    #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
-    new_card_flag = False
-    for card in card_name_list:
-        if card not in reader.values:
-            print("found new card")
-            new_card_flag = True
-            break
-    
-                
-    #check if column exists
-    if (column_name) not in reader.columns:
-        #create new column
-        reader[column_name] = 'NaN'
-        for index1, row1 in df.iterrows():
-            for index2, row2 in reader.iterrows():
-                if row1['Card name'] == row2['Card name']:
-                    #reader.at[index2, column_name] = float(row1[column_name]) + float(random.randint(155, 389)/100)
-                    reader.at[index2, column_name] = float(row1[column_name])
-                    
-        #run statistics
-        for index, row in reader.iterrows():
-            Lowest_price = 99999999999.00
-            Highest_price = 0.00
-            sum_of_prices = 0.00
+        #check if my_list is empty
+        if os.stat('single_card_list.txt').st_size == 0:
+            print("single_card_list.txt is empty")
             
-            for col in reader.columns:
-                if col not in ignore_list:
+        
+        text_file = open("single_card_list.txt", "r")
+        my_list = text_file.readlines()
+    
+    split_mylist = []
+    for url in my_list:
+        split_mylist.append(url.split( ))
+    
+    #check for bad urls, skip, and give a popup message
+    for url in split_mylist:
+        ret = single_card_request(1,url[0])
+        
+        if "Could not find seller" in ret:
+            no_seller_index = my_list.index(url[0])
+            popup_msg("MTGBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
+            sys.exit()
+        
+        elif 'Bad url' in ret:
+            bad_url_index = my_list.index(url[0])
+            popup_msg("MTGBot Error", "Bad Url at: " + str(bad_url_index), 5)
+            sys.exit()
+            
+        else:
+            card_name_list.append(ret[0])
+            price_list.append(ret[1])
+    
+    sign_list = []
+    threshold_list = []
+    #add values to sign list and threshold list
+    for arr in split_mylist:
+        if len(arr) == 3:
+            sign_list.append(arr[1])
+            threshold_list.append(arr[2])
+        else:
+            sign_list.append([])
+            threshold_list.append([])
+    
+    
+    #create an excel file if not already made
+    if path.isfile(my_list_file_path) == False and len(my_list) != 0:
+        df = pd.DataFrame()
+        df['Card name'] = card_name_list
+        df['Average'] = 0.00
+        df['Weekly Change'] = 0.00
+        df['Daily Change'] = 0.00
+        df['Lowest Price'] = 0.00
+        df['Highest Price'] = 0.00
+        
+        converted_price_list = [float(i) for i in price_list]
+        df[column_name] = converted_price_list
+        
+        #add total row       
+        df.at['Total', column_name] = df[column_name].sum()
+        
+        df.to_excel (my_list_file_path, index = False)
+        
+        
+    #Change/append to existing file if found  
+    elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
+        df = pd.DataFrame()
+        df['Card name'] = card_name_list
+        df['Average'] = 0.00    
+        df['Weekly Change'] = 0.00
+        df['Daily Change'] = 0.00
+        df['Lowest Price'] = 0.00
+        df['Highest Price'] = 0.00
+        
+        converted_price_list = [float(i) for i in price_list]
+        df[column_name] = converted_price_list
+        
+        ignore_list = ['Card name', 'Average', 'Daily Change', 'Weekly Change', 'Lowest Price', 'Highest Price']
+        # read existing file
+        reader = pd.read_excel(my_list_file_path)
+        
+        #remove totals row
+        reader.drop(reader.tail(1).index,inplace=True)
+        
+        #check if any cards were removed
+        cards_removed_flag = False
+        for value in reader['Card name'].values:
+            if value not in card_name_list:
+                print("Not found:", value)
+                reader = reader[~reader['Card name'].isin([value])]
+                cards_removed_flag = True
+    
+        #new card precheck ==> allows for new cards to be added and program to be rerun on the same day(/column)
+        new_card_flag = False
+        for card in card_name_list:
+            if card not in reader.values:
+                print("found new card")
+                new_card_flag = True
+                break
+        
                     
-                    current_val = float(row[col])
-                    sum_of_prices += current_val
-                    
-                    if reader.at[index, 'Highest Price'] == 0.00 or current_val > reader.at[index, 'Highest Price']:
-                          reader.at[index, 'Highest Price'] = current_val
-                          reader['Highest Price'] = reader['Highest Price'].astype('float64')
+        #check if column exists
+        if (column_name) not in reader.columns:
+            #create new column
+            reader[column_name] = 'NaN'
+            for index1, row1 in df.iterrows():
+                for index2, row2 in reader.iterrows():
+                    if row1['Card name'] == row2['Card name']:
+                        reader.at[index2, column_name] = float(row1[column_name]) + float(random.randint(155, 389)/100)
+                        #reader.at[index2, column_name] = float(row1[column_name])
                         
-                    if reader.at[index, 'Lowest Price'] == 0.00 or current_val < reader.at[index, 'Lowest Price']:
-                        reader.at[index, 'Lowest Price'] = current_val
-                        reader['Lowest Price'] = reader['Lowest Price'].astype('float64')
-            
-            #run statistics only if we have 2 days collected
-            if(len(reader.columns) > (len(ignore_list) + 1)):
-                #Average $ of all days
-                formatted_num = format(sum_of_prices/(len(reader.columns) - len(ignore_list)), '.2f')
-                reader.at[index, 'Average'] = float(formatted_num)
-                reader['Average'] = reader['Average'].astype('float64')
+            #run statistics
+            for index, row in reader.iterrows():
+                Lowest_price = 99999999999.00
+                Highest_price = 0.00
+                sum_of_prices = 0.00
                 
-              
-                #Daily $ change of last 2 days
-                today_column = reader.columns[len(reader.columns) - 1]
-                yesterday_column = reader.columns[len(reader.columns) - 2]
-                formatted_num = format(float((row[today_column])) - float((row[yesterday_column])), '.2f')
-                reader.at[index, 'Daily Change'] = float(formatted_num)
-                reader['Daily Change'] = reader['Daily Change'].astype('float64')
+                for col in reader.columns:
+                    if col not in ignore_list:
+                        
+                        current_val = float(row[col])
+                        sum_of_prices += current_val
+                        
+                        if reader.at[index, 'Highest Price'] == 0.00 or current_val > reader.at[index, 'Highest Price']:
+                              reader.at[index, 'Highest Price'] = current_val
+                              reader['Highest Price'] = reader['Highest Price'].astype('float64')
+                            
+                        if reader.at[index, 'Lowest Price'] == 0.00 or current_val < reader.at[index, 'Lowest Price']:
+                            reader.at[index, 'Lowest Price'] = current_val
+                            reader['Lowest Price'] = reader['Lowest Price'].astype('float64')
                 
-            
-            #Weekly $ change of last 7 days
-            if(len(reader.columns) > (len(ignore_list) + 6)):
-                today_column = reader.columns[len(reader.columns) - 1]
-                last_weekday_column = reader.columns[len(reader.columns) - 7]
-                formatted_num = format(float((row[today_column])) - float((row[last_weekday_column])), '.2f')
-                reader.at[index, 'Weekly Change'] = float(formatted_num)
-                reader['Weekly Change'] = reader['Weekly Change'].astype('float64')
-
-                                
-    #check for new cards or removed cards ON SAME DAY
-    elif new_card_flag == True or cards_removed_flag == True :
-        if new_card_flag == True:
-            for card in card_name_list:
-                if card not in reader.values:
-                    reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
-                    print(reader.tail(2))
+                #run statistics only if we have 2 days collected
+                if(len(reader.columns) > (len(ignore_list) + 1)):
+                    #Average $ of all days
+                    formatted_num = format(sum_of_prices/(len(reader.columns) - len(ignore_list)), '.2f')
+                    reader.at[index, 'Average'] = float(formatted_num)
+                    reader['Average'] = reader['Average'].astype('float64')
                     
-        if cards_removed_flag == True:
-              print("Card was removed")
-              popup_msg("MTGBot", "Card was removed", 5)
-            
+                  
+                    #Daily $ change of last 2 days
+                    today_column = reader.columns[len(reader.columns) - 1]
+                    yesterday_column = reader.columns[len(reader.columns) - 2]
+                    formatted_num = format(float((row[today_column])) - float((row[yesterday_column])), '.2f')
+                    reader.at[index, 'Daily Change'] = float(formatted_num)
+                    reader['Daily Change'] = reader['Daily Change'].astype('float64')
+                    
                 
-    #Don't rerun the same day (unless we have new cards to add)
-    #Note: Older day columns will be filled with NaN or empty spaces       
-    else:
-        print("Today is done")
-        popup_msg("MTGBot", "MTGBot has already run today", 5)
-        sys.exit()
+                #Weekly $ change of last 7 days
+                if(len(reader.columns) > (len(ignore_list) + 6)):
+                    today_column = reader.columns[len(reader.columns) - 1]
+                    last_weekday_column = reader.columns[len(reader.columns) - 7]
+                    formatted_num = format(float((row[today_column])) - float((row[last_weekday_column])), '.2f')
+                    reader.at[index, 'Weekly Change'] = float(formatted_num)
+                    reader['Weekly Change'] = reader['Weekly Change'].astype('float64')
     
-    
+                                    
+        #check for new cards or removed cards ON SAME DAY
+        elif new_card_flag == True or cards_removed_flag == True :
+            if new_card_flag == True:
+                for card in card_name_list:
+                    if card not in reader.values:
+                        reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
+                        print(reader.tail(2))
+                        
+            if cards_removed_flag == True:
+                  print("Card was removed")
+                  popup_msg("MTGBot", "Card was removed", 5)
+                
+                    
+        #Don't rerun the same day (unless we have new cards to add)
+        #Note: Older day columns will be filled with NaN or empty spaces       
+        else:
+            print("Today is done")
+            popup_msg("MTGBot", "MTGBot has already run today", 5)
+            sys.exit()
         
-    
-    #delete file so we can resave cleanly
-    #otherwise formatting is really annoying
-    try:
-        os.remove(my_list_file_path)
-    except:
-        print("Please close the file")
-        popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
-        sys.exit()
         
-    
-    #add total row
-    reader.at['Total', 'Average'] = reader['Average'].sum()
-    #write to file
-    reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
+            
+        
+        #delete file so we can resave cleanly
+        #otherwise formatting is really annoying
+        try:
+            os.remove(my_list_file_path)
+        except:
+            print("Please close the file")
+            popup_msg("MTGBot Error: Exiting", "Please close the excel sheet and rerun", 5)
+            sys.exit()
+            
+        
+        #add total row
+        reader.at['Total', 'Average'] = reader['Average'].sum()
+        #write to file
+        reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
     
     
 #############################Large Price Lists Code############################
 
 
     
-#get_set_list_with_settings()
+get_set_list_with_settings()
 u,p,r,s = get_email_settings()
-#time.sleep(5)
-send_email(u, p, r, s, "./excels/my_list_report.xlsx")
-#check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
+time.sleep(5)
+send_email(u, p, r, s, "./excels/single_card_list_report.xlsx")
+check_price_thresholds(card_name_list, price_list, sign_list, threshold_list)
 popup_msg("MTGBot", "Your Daily Report is in!", 5)
