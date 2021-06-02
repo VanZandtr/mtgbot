@@ -76,6 +76,7 @@ def send_email(user, pwd, recipient, subject, body, tags=None):
             server.login(user, pwd)
             server.sendmail(user, recipient, text)
     except:
+        print("error in email")
         popup_msg("M:TGFBot Error:", "Error sending email. Please recheck email_settings.txt file", 10)
         return
 
@@ -169,32 +170,32 @@ def full_list_request(page, WebUrl, rarity = None, price_op= None, price= None,
                 if row[2] != rarity.replace(" ", "") :
                     continue
             
-            if price_op and price:
-                if ops[price_op.replace(" ", "")](float(row[3]), float(price.replace(" ", ""))):
+            if price_op and price:                
+                if ops[price_op.replace(" ", "")](float(row[3].replace(",", "")), float(price.replace(" ", "").replace(",", " "))):
                     pass
                 else:
                     continue
                 
             if daily_price_change_op and daily_price_change:
-                if ops[daily_price_change_op.replace(" ", "")](float(row[4].replace("+", "")), float(daily_price_change.replace(" ", ""))):
+                if ops[daily_price_change_op.replace(" ", "")](float(row[4].replace("+", "").replace(",", "")), float(daily_price_change.replace(" ", ""))):
                     pass
                 else:
                     continue
             
             if daily_percent_change_op and daily_percent_change:
-                if ops[daily_price_change_op.replace(" ", "")](float(row[5].replace("+", "").replace("%", "")), float(daily_price_change.replace(" ", ""))):
+                if ops[daily_price_change_op.replace(" ", "")](float(row[5].replace("+", "").replace("%", "").replace(",", "")), float(daily_price_change.replace(" ", ""))):
                     pass
                 else:
                     continue
             
             if weekly_price_change_op and weekly_price_change:
-                if ops[weekly_price_change_op.replace(" ", "")](float(row[6].replace("+", "")), float(weekly_price_change.replace(" ", ""))):
+                if ops[weekly_price_change_op.replace(" ", "")](float(row[6].replace("+", "").replace(",", "")), float(weekly_price_change.replace(" ", ""))):
                     pass
                 else:
                     continue
             
             if weekly_percent_change_op and weekly_percent_change:
-                if ops[weekly_percent_change_op.replace(" ", "")](float(row[7].replace("+", "").replace("%", "")), float(weekly_percent_change.replace(" ", ""))):
+                if ops[weekly_percent_change_op.replace(" ", "")](float(row[7].replace("+", "").replace("%", "").replace(",", "")), float(weekly_percent_change.replace(" ", ""))):
                     pass
                 else:
                     continue
@@ -374,8 +375,8 @@ def get_set_list_with_settings():
     
     
     #run all the price lists given in the file
-    name_index = 0
     for url in price_lists:
+        print(url)
         ret_msg = full_list_request(1,url, rarity, price_op, price, 
                                     daily_price_change_op, daily_price_change,
                                     daily_percent_change_op, daily_percent_change,
@@ -384,14 +385,22 @@ def get_set_list_with_settings():
         
         #remove illegal file characters / format filename
         characters_to_remove = "*./\[]:;|,"
-        fn = (str(price_lists_names[name_index]) + today)
+        
+        fn = url.split('/')[-1] + "-" + today
+        fn = fn.replace('\n',"")
+        fn = fn.replace('\t',"")
+        
         for c in characters_to_remove:
             fn = fn.replace(c, "")
-        fn = fn.strip(' \n\t')
+            
         fn = '.\\excels\\' + fn + ".xlsx"
         
-        ret_msg.to_excel (fn, index = False)
-        name_index += 1
+        try:
+            ret_msg.to_excel (fn, index = False)
+        except:
+            print('1')
+            popup_msg("M:TGFBot Error", "Bad Price lists url, please check price_lists.txt", 10)
+            continue
 
 
 
@@ -543,13 +552,11 @@ for url in split_mylist:
     ret = single_card_request(1,url[0])
     
     if "Could not find seller" in ret:
-        no_seller_index = my_list.index(url[0])
-        popup_msg("M:TGFBot Error", "Could not find a seller for: " + str(no_seller_index), 5)
+        popup_msg("M:TGFBot Error", "Could not find a seller for: " + str(url[0]), 5)
         sys.exit()
     
     elif 'Bad url' in ret:
-        bad_url_index = my_list.index(url[0])
-        popup_msg("M:TGFBot Error", "Bad Url at: " + str(bad_url_index), 5)
+        popup_msg("M:TGFBot Error", "Bad Url: " + str(url[0]), 5)
         sys.exit()
         
     else:
