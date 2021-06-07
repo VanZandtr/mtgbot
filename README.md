@@ -1,4 +1,10 @@
- # <img style="float: left;" src="pics/title.png">
+# <img style="float: left;" src="pics/title.png">
+## Notice!
+This is a work in progress. 
+
+Please assume there will be issues (though I hope you won't encounter any). I will triage issues as I receive them. 
+
+Thanks!
 
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
@@ -123,6 +129,12 @@ A4: By all means use those sites (I probably do too)! I'm sure every one of thos
 
 Q5: I have an issue, question, or suggestion.  
 A5: No problem! Feel free to direct message me on reddit at /u/Albus_Lupi. Thanks for taking a look!
+
+## Known Issues:
+### AttributeError: 'ToastNotifier' object has no attribute 'classAtom'
+Problem Explaination: This issue is caused by a program crashing/quiting mid pop-up ("toast") notification.  
+Solution: If you are running from a IDE, a restart to reset object instances worked for me.  
+
 
 # Contributors & Testers:
 ## Get your name here! Take the poll at: xxxxxxxxx
