@@ -41,7 +41,7 @@ This Bot can:
 * Display pop-up error message to easily trouble shoot your issues
 <img style="float: left;" src="pics/error_message.PNG">
 
-# Intial setup:
+# Initial setup:
 
 ## Python
 Download Python here: https://www.python.org/downloads/
