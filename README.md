@@ -76,11 +76,12 @@ Download pip here if it doesn't come with your python download: https://pip.pypa
      
 
  ## Automation Setup (Windows):
-   * Step 1: Find your python path with: "python -c "import sys; print(sys.executable)"
+   * Step 1: Open a command prompt (I'm using git bash here)
+   * Step 2: Find your python path with: "python -c "import sys; print(sys.executable)"
    ![python command](pics/python_command.png)  
-   * Step 2: Create a new task in task scheduler
+   * Step 3: Create a new task in task scheduler
    <img style="float: left;" src="pics/automation_example.png">  
-   * Step 3: Add additional timing settings to the created task
+   * Step 4: Add additional timing settings to the created task
    <img style="float: left;" src="pics/automation_settings.png">
    
    Refer to this link for more information:  
