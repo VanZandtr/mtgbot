@@ -3,7 +3,8 @@
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
 * Step 2: Download or fork code
-* Step 3: Download pip and run "pip install -r requirements.txt"
+* Step 3: Download pip
+* Step 4: Open a cmd prompt/powershell, navigate to the bot's folder, and run "pip install -r requirements.txt"
 * Step 4: Edit single_card_list.txt with your single cards and price thresholds
 * Step 5: Edit price_lists with your format
 * Step 6: Edit your price_lists thresholds in settings.txt (optional)
@@ -43,7 +44,11 @@ Download Python here: https://www.python.org/downloads/
 pip is a package manager for Python and allows my program to use complex libraries for sending emails, editing excels, etc.
 Download pip here if it doesn't come with your python download: https://pip.pypa.io/en/stable/installing/
 
-Run "pip install -r requirements.txt" to download all my packages
+### Installing requirements with command prompt / powershell
+* Open bot folder
+* *Shift + Right Click* in the folder menu and open command prompt / powershell
+<img style="float: left;" src="pics/powershell_example.PNG">  
+* Run "pip install -r requirements.txt" to download all my packages
 
 # Lists setup and usage:
 ## Single Card Setup:
