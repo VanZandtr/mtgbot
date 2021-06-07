@@ -36,7 +36,12 @@ def popup_msg(header, msg, d):
     toaster.show_toast(header, msg, duration = d)
 
 #Generate and send an email
-def send_email(user, pwd, recipient, subject, body, tags=None):
+def send_email(user, pwd, recipient, subject, body, tags=None):    
+    #should probably be .contains here
+    if user == " your_email@gmail.com" and pwd == " your_app_password (e.g. jghfetueesioupa)" and recipient == " where_to_sent@gmail.com" and subject == " your_email_subject_here":
+        return
+    elif user == "" and pwd == "" and recipient == "" and subject == "":
+        return
     
     try:
         # Create a multipart message and set headers
@@ -86,7 +91,6 @@ def get_email_settings():
     if path.isfile('./files_to_change/email_settings.txt'):
         pass
     else:
-        popup_msg("M:TGFBot Error:", "Error getting email detatils. Please redownload email_settings.txt file", 10)
         return
     
     #get lines
