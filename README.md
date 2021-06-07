@@ -81,7 +81,8 @@ Download pip here if it doesn't come with your python download: https://pip.pypa
    * Note 1: If a card does not adhere to the settings you provide it will not show up in the excel file  
      
 
- ## Automation Setup (Windows):
+ ## Automation Setup:
+ ### Windows:
    * Step 1: Open a command prompt (I'm using git bash here)
    * Step 2: Find your python path with: "python -c "import sys; print(sys.executable)"
    ![python command](pics/python_command.png)  
@@ -92,6 +93,9 @@ Download pip here if it doesn't come with your python download: https://pip.pypa
    
    Refer to this link for more information:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
+   
+ ### Mac:
+ I don't own a Mac to test on, so please refer to this link: http://theautomatic.net/2020/11/18/how-to-schedule-a-python-script-on-a-mac/
    
  
  ## Email Setup:
