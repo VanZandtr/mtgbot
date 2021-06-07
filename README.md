@@ -2,7 +2,7 @@
 ## Notice!
 This is a work in progress. 
 
-Please assume there will be issues (though I hope you won't encounter any). I will triage issues as I receive them. 
+Please assume there will be issues (finger crossed I caught all the edge cases), but I will triage these as I receive them. 
 
 Thanks!
 
