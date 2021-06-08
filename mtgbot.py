@@ -440,12 +440,15 @@ def single_card_request(page,WebUrl):
         
         tcg_player_market = []
         tcg_player_mid = []
+        card_kingdom = []
+        ebay = []
         found_seller_flag = False
         
         for x in string_list:
             #print(x)
             
             if x == "TCGplayer Market Price":
+                print("1")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -454,10 +457,10 @@ def single_card_request(page,WebUrl):
                 tcg_player_market.append(string_list[index + 1])
                 tcg_player_market.append(string_list[index + 2])
                 tcg_player_market.append(string_list[index + 3])
-                tcg_player_market.append(string_list[index + 4])
-                break
+                tcg_player_market.append(string_list[index + 4])               
             
             if x == "TCGplayer Mid":
+                print("2")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -466,32 +469,31 @@ def single_card_request(page,WebUrl):
                 tcg_player_mid.append(string_list[index + 1])
                 tcg_player_mid.append(string_list[index + 2])
                 tcg_player_mid.append(string_list[index + 3])
-                tcg_player_mid.append(string_list[index + 4])
-                break
+                tcg_player_mid.append(string_list[index + 4])               
             
             if x == "Card Kingdom":
+                print("3")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
                 
-                tcg_player_mid.append(string_list[index])
-                tcg_player_mid.append(string_list[index + 1])
-                tcg_player_mid.append(string_list[index + 2])
-                tcg_player_mid.append(string_list[index + 3])
-                tcg_player_mid.append(string_list[index + 4])
-                break
+                card_kingdom.append(string_list[index])
+                card_kingdom.append(string_list[index + 1])
+                card_kingdom.append(string_list[index + 2])
+                card_kingdom.append(string_list[index + 3])
+                card_kingdom.append(string_list[index + 4])         
             
             if x == "eBay - Buy It Now":
+                print("4")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
                 
-                tcg_player_mid.append(string_list[index])
-                tcg_player_mid.append(string_list[index + 1])
-                tcg_player_mid.append(string_list[index + 2])
-                tcg_player_mid.append(string_list[index + 3])
-                tcg_player_mid.append(string_list[index + 4])
-                break
+                ebay.append(string_list[index])
+                ebay.append(string_list[index + 1])
+                ebay.append(string_list[index + 2])
+                ebay.append(string_list[index + 3])
+                ebay.append(string_list[index + 4])
             
         if found_seller_flag == False:
             return_msg.append("Could not find seller")
@@ -501,9 +503,17 @@ def single_card_request(page,WebUrl):
         temp_list = []
         if len(tcg_player_market) != 0:
             temp_list = tcg_player_market
-        else:
+            
+        elif len(tcg_player_mid) != 0:
             temp_list = tcg_player_mid
-        
+            
+        elif len(card_kingdom) != 0:
+            temp_list = card_kingdom
+            
+        else:
+            temp_list = ebay
+            
+        print() 
         card_name = string_list[0]
         result = re.findall('\d*\.?\d+', temp_list[2])
         price = result[0]
