@@ -15,7 +15,9 @@ Thanks for your support and understanding!
 * Step 6: Edit your price_lists thresholds in settings.txt (optional)
 * Step 7: Automate your code (optional)
 * Step 8: Setup email in email_settings.py (optional)
-* Step 9: Enjoy!
+* Step 9: Open powershell/command prompt in the mtgbot folder
+* Step 10; run: "python ./mtgbot"
+* Step 10: Enjoy!
 
 ## Purpose and Goals:
    
@@ -96,6 +98,17 @@ Download pip here if it doesn't come with your python download: https://pip.pypa
  ### Mac:
  I don't own a Mac to test on, so please refer to this link: http://theautomatic.net/2020/11/18/how-to-schedule-a-python-script-on-a-mac/
    
+ ## Running without Automation:
+ ### Powershell / Command prompt
+   * Open bot folder
+   * *Shift + Right Click* in the folder menu and open command prompt / powershell
+   <img style="float: left;" src="pics/powershell_example.PNG"> 
+   * Run: "python ./mtgbot"
+   
+ ### IDE (integrated development environment)
+ I use the Spyder IDE since it comes free with an anaconda download (Python packager download)
+ * Open mtgbot.py in IDE and run code  
+ <img style="float: left;" src="pics/spyder.png">   
  
  ## Email Setup:
    * Step 1: Enable less secure apps with app passwords (https://support.google.com/accounts/answer/185833?hl=en)
