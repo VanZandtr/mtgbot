@@ -1,4 +1,6 @@
 # <img style="float: left;" src="pics/title.png">
+Current Reddit link: (link here)
+
 ## Notice!
 This is a work in progress, so please assume there will be issues. 
 Fingers crossed I caught all the edge cases, but I will do my best to triage these issues as I receive them. 
@@ -138,7 +140,9 @@ Q2: Can I run both single cards and multicard lists at the same time?
 A2: Yep!
 
 Q3: I see I can only run the single card list once, why?  
-A3: This is an intentional by design as MTGGoldfish doesn't update their prices but once a day. However if you remove or add a new card/price list to your lists you can rerun your program without the "Already ran today" message. 
+A3: This is an intentional by design as MTGGoldfish doesn't update their prices but once a day. However if you remove or add a new card/price list to your lists you can rerun your program without the "Already ran today" message.  
+
+(If you're having a code breaking issue with this delete all the excels files in /excels and rerun)
 
 Q4: Why wouldn't I just use site x, y, or z?  
 A4: By all means use those sites (I probably do too)! I'm sure every one of those sites has advantages over (and much more color than) mine, but the goal here (restating from above) was to create a bot which could keep track of multiple cards and lists simulataneously which would spit out reusable excel sheets and emails all while running in the background. Simply log into your computer and your top level card analytics and notifications are already running!  
