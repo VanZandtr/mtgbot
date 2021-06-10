@@ -1,10 +1,9 @@
 # <img style="float: left;" src="pics/title.png">
 ## Notice!
-This is a work in progress. 
+This is a work in progress, so please assume there will be issues. 
+Fingers crossed I caught all the edge cases, but I will do my best to triage these issues as I receive them. 
 
-Please assume there will be issues (finger crossed I caught all the edge cases), but I will triage these as I receive them. 
-
-Thanks!
+Thanks for your support and understanding!
 
 ## TLDWTR (Too Long Don't Want To Read)
 * Step 1: Download Python
