@@ -1,5 +1,5 @@
 # <img style="float: left;" src="pics/title.png">
-Current Reddit link: (link here)
+Current Reddit link: https://www.reddit.com/r/mtgfinance/comments/nwzj8a/magic_finance_trending_bot_personal_project/
 
 ## Notice!
 This is a work in progress, so please assume there will be issues. 
