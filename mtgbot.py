@@ -317,7 +317,6 @@ def get_set_list_with_settings():
             if setting[1] != '':
                 split_list = setting[1].split( )
                 if len(split_list) != 2:
-                    print(split_list)
                     popup_msg("M:TGFBot Error", "Bad Price setting. Please make sure format is: \"Price: operator price\" ", 10)
                     sys.exit()
                 else:
@@ -448,7 +447,6 @@ def single_card_request(page,WebUrl):
             #print(x)
             
             if x == "TCGplayer Market Price":
-                print("1")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -460,7 +458,6 @@ def single_card_request(page,WebUrl):
                 tcg_player_market.append(string_list[index + 4])               
             
             if x == "TCGplayer Mid":
-                print("2")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -472,7 +469,6 @@ def single_card_request(page,WebUrl):
                 tcg_player_mid.append(string_list[index + 4])               
             
             if x == "Card Kingdom":
-                print("3")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -484,7 +480,6 @@ def single_card_request(page,WebUrl):
                 card_kingdom.append(string_list[index + 4])         
             
             if x == "eBay - Buy It Now":
-                print("4")
                 found_seller_flag = True
                 
                 index = string_list.index(x)
@@ -513,7 +508,6 @@ def single_card_request(page,WebUrl):
         else:
             temp_list = ebay
             
-        print() 
         card_name = string_list[0]
         result = re.findall('\d*\.?\d+', temp_list[2])
         price = result[0]
@@ -706,7 +700,6 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
             for card in card_name_list:
                 if card not in reader.values:
                     reader = reader.append({'Card name': card, column_name: price_list[card_name_list.index(card)]}, ignore_index=True)
-                    print(reader.tail(2))
                     
         if cards_removed_flag == True:
               print("Card was removed")
@@ -734,7 +727,8 @@ elif path.isfile(my_list_file_path) == True and len(my_list) != 0:
         
     
     #add total row
-    reader.at['Total', 'Average'] = reader['Average'].sum()
+    reader.at['Total', column_name] = reader[column_name].sum()
+    
     #write to file
     reader.to_excel(my_list_file_path, sheet_name='Main Sheet', index = False)
     

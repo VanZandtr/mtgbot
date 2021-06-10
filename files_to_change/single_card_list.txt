@@ -1,6 +1,5 @@
 https://www.mtggoldfish.com/price/Tempest/Intuition#paper > 10.00
-https://www.mtggoldfish.com/price/Ice+Age/Tinder+Wall#paper < 2.50
 https://www.mtggoldfish.com/price/Alliances/Elvish+Spirit+Guide#paper = 4.00
 https://www.mtggoldfish.com/price/Magic+2012/Phantasmal+Image#paper <= 1.00
 https://www.mtggoldfish.com/price/Ice+Age/Demonic+Consultation#paper >= 5.00
-https://www.mtggoldfish.com/price/Ice+Age/Demonic+Consultation#paper
+https://www.mtggoldfish.com/price/Stronghold/Mox+Diamond#paper
