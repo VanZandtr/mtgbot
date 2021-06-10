@@ -8,18 +8,18 @@ Fingers crossed I caught all the edge cases, but I will do my best to triage the
 Thanks for your support and understanding!
 
 ## TLDWTR (Too Long Don't Want To Read)
-* Step 1: Download Python
-* Step 2: Download or fork code
-* Step 3: Download pip
-* Step 4: Open a cmd prompt/powershell, navigate to the bot's folder, and run "pip install -r requirements.txt"
-* Step 4: Edit single_card_list.txt with your single cards and price thresholds
-* Step 5: Edit price_lists with your format
-* Step 6: Edit your price_lists thresholds in settings.txt (optional)
-* Step 7: Automate your code (optional)
-* Step 8: Setup email in email_settings.py (optional)
-* Step 9: Open powershell/command prompt in the mtgbot folder
-* Step 10; run: "python ./mtgbot"
-* Step 10: Enjoy!
+Step 1: Download Python </br>
+Step 2: Download or fork code</br>
+Step 3: Download pip</br>
+Step 4: Open a cmd prompt/powershell, navigate to the bot's folder, and run "pip install -r requirements.txt"</br>
+Step 4: Edit single_card_list.txt with your single cards and price thresholds</br>
+Step 5: Edit price_lists with your format</br>
+Step 6: Edit your price_lists thresholds in settings.txt (optional)</br>
+Step 7: Automate your code (optional)</br>
+Step 8: Setup email in email_settings.py (optional)</br>
+Step 9: Open powershell/command prompt in the mtgbot folder</br>
+Step 10; run: "python ./mtgbot"</br>
+Step 10: Enjoy!</br>
 
 ## Purpose and Goals:
    
@@ -54,44 +54,44 @@ pip is a package manager for Python and allows my program to use complex librari
 Download pip here if it doesn't come with your python download: https://pip.pypa.io/en/stable/installing/
 
 ### Installing requirements with command prompt / powershell
-* Open bot folder
-* *Shift + Right Click* in the folder menu and open command prompt / powershell
+Step 1: Open bot folder </br>
+Step 2: *Shift + Right Click* in the folder menu and open command prompt / powershell </br>
 <img style="float: left;" src="pics/powershell_example.PNG">  
-* Run "pip install -r requirements.txt" to download all my packages
+Step 3: Run "pip install -r requirements.txt" to download all my packages </br>
 
 # Lists setup and usage:
 ## Single Card Setup:
-   * Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  
-   * Step 2: Paste links into single_card_list.txt making sure each card is on a new line  
-   * Step 3: Add threshold values to the end of each card (valid operators: <, >, <=, >=, = or ==)(optional)  
+   Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  </br>
+   Step 2: Paste links into single_card_list.txt making sure each card is on a new line  </br>
+   Step 3: Add threshold values to the end of each card (valid operators: <, >, <=, >=, = or ==)(optional)  </br>
    <img style="float: left;" src="pics/single_card_list.PNG">
-   * Step 4: Run code and find my_list_report excel in /excels  
+   Step 4: Run code and find my_list_report excel in /excels  </br>
    <img style="float: left;" src="pics/single_card_list_1_day.PNG">  
-   * Multi Day (7 Days):<br />
+   Multi Day (7 Days):</br>
    <img style="float: left;" src="pics/single_card_list_7_days.PNG">
-   * Note 1: The above prices are mocked to demo a week of running the code (tinder wall is not a 3$ card)<br />
-   * Note 2: if a price reaches a threshold a pop-up message will be displayed<br />
+   Note 1: The above prices are mocked to demo a week of running the code (tinder wall is not a 3$ card) </br>
+   Note 2: if a price reaches a threshold a pop-up message will be displayed </br>
    <img style="float: left;" src="pics/single_card_notification.PNG">
    
 ## Price List Setup:
-   * Step 1: Obtain links to the lists (e.g. https://www.mtggoldfish.com/index/modern#paper)  
-   * Step 2: Paste links into price_lists.txt making sure each list is on a new line  
-   <img style="float: left;" src="pics/price_lists.PNG">
-   * Step 3: Add threshold values to the setting.txt file (valid operators: <, >, <=, >=, = or ==)(optional)  
-   <img style="float: left;" src="pics/settings.PNG">
-   * Step 4: Run code and find excel in /excels
-   <img style="float: left;" src="pics/price_lists_report.PNG">
-   * Note 1: If a card does not adhere to the settings you provide it will not show up in the excel file  
+   Step 1: Obtain links to the lists (e.g. https://www.mtggoldfish.com/index/modern#paper) </br>
+   Step 2: Paste links into price_lists.txt making sure each list is on a new line  </br>
+   <img style="float: left;" src="pics/price_lists.PNG"> </br>
+   Step 3: Add threshold values to the setting.txt file (valid operators: <, >, <=, >=, = or ==)(optional) </br>
+   <img style="float: left;" src="pics/settings.PNG"> </br>
+   Step 4: Run code and find excel in /excels </br>
+   <img style="float: left;" src="pics/price_lists_report.PNG"> </br>
+   Note 1: If a card does not adhere to the settings you provide it will not show up in the excel file  </br>
      
 
  ## Automation Setup:
  ### Windows:
-   * Step 1: Open a command prompt (I'm using git bash here)
-   * Step 2: Find your python path with: "python -c "import sys; print(sys.executable)"
-   ![python command](pics/python_command.png)  
-   * Step 3: Create a new task in task scheduler
+   Step 1: Open a command prompt (I'm using git bash here) </br>
+   Step 2: Find your python path with: "python -c "import sys; print(sys.executable)" </br>
+   ![python command](pics/python_command.png) 
+   Step 3: Create a new task in task scheduler </br>
    <img style="float: left;" src="pics/automation_example.png">  
-   * Step 4: Add additional timing settings to the created task
+   Step 4: Add additional timing settings to the created task </br>
    <img style="float: left;" src="pics/automation_settings.png">
    
    Refer to this link for more information:  
@@ -102,21 +102,21 @@ Download pip here if it doesn't come with your python download: https://pip.pypa
    
  ## Running without Automation:
  ### Powershell / Command prompt
-   * Open bot folder
-   * *Shift + Right Click* in the folder menu and open command prompt / powershell
-   <img style="float: left;" src="pics/powershell_example.PNG"> 
-   * Run: "python ./mtgbot"
+   Open bot folder </br>
+   *Shift + Right Click* in the folder menu and open command prompt / powershell </br>
+   <img style="float: left;" src="pics/powershell_example.PNG"> </br> 
+   Run: "python ./mtgbot" </br>
    
  ### IDE (integrated development environment)
- I use the Spyder IDE since it comes free with an anaconda download (Python packager download)
- * Open mtgbot.py in IDE and run code  
- <img style="float: left;" src="pics/spyder.png">   
+ I use the Spyder IDE since it comes free with an anaconda download (Python packager download) </br>
+ Open mtgbot.py in IDE and run code </br>  
+ <img style="float: left;" src="pics/spyder.png">    
  
  ## Email Setup:
-   * Step 1: Enable less secure apps with app passwords (https://support.google.com/accounts/answer/185833?hl=en)
-   * Step 2: Edit /files_to_change/email_settings.txt
-   <img style="float: left;" src="pics/email_settings.PNG">
-   <img style="float: left;" src="pics/sent_email.png">
+   Step 1: Enable less secure apps with app passwords (https://support.google.com/accounts/answer/185833?hl=en) </br>
+   Step 2: Edit /files_to_change/email_settings.txt </br>
+   <img style="float: left;" src="pics/email_settings.PNG"> </br>
+   <img style="float: left;" src="pics/sent_email.png"> </br>
    
    
  ## Files:
