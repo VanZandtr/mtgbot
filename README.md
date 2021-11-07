@@ -63,14 +63,14 @@ Step 3: Run "pip install -r requirements.txt" to download all my packages </br>
    Step 1: Obtain links to cards (e.g. https://www.mtggoldfish.com/price/Limited+Edition+Alpha/Black+Lotus#paper)  </br>
    Step 2: Paste links into single_card_list.txt making sure each card is on a new line  </br>
    Step 3: Add threshold values to the end of each card (valid operators: <, >, <=, >=, = or ==)(optional)  </br>
-   <img style="float: left;" src="pics/single_card_list.PNG">
+   <img style="float: left;" src="pics/single_card_list.PNG"></br>
    Step 4: Run code and find my_list_report excel in /excels  </br>
-   <img style="float: left;" src="pics/single_card_list_1_day.PNG">  
+   <img style="float: left;" src="pics/single_card_list_1_day.PNG"> </br> 
    Multi Day (7 Days):</br>
-   <img style="float: left;" src="pics/single_card_list_7_days.PNG">
+   <img style="float: left;" src="pics/single_card_list_7_days.PNG"></br>
    Note 1: The above prices are mocked to demo a week of running the code (tinder wall is not a 3$ card) </br>
    Note 2: if a price reaches a threshold a pop-up message will be displayed </br>
-   <img style="float: left;" src="pics/single_card_notification.PNG">
+   <img style="float: left;" src="pics/single_card_notification.PNG"></br>
    
 ## Price List Setup:
    Step 1: Obtain links to the lists (e.g. https://www.mtggoldfish.com/index/modern#paper) </br>
@@ -89,9 +89,9 @@ Step 3: Run "pip install -r requirements.txt" to download all my packages </br>
    Step 2: Find your python path with: "python -c "import sys; print(sys.executable)" </br>
    ![python command](pics/python_command.png) 
    Step 3: Create a new task in task scheduler </br>
-   <img style="float: left;" src="pics/automation_example.png">  
+   <img style="float: left;" src="pics/automation_example.png"> </br>
    Step 4: Add additional timing settings to the created task </br>
-   <img style="float: left;" src="pics/automation_settings.png">
+   <img style="float: left;" src="pics/automation_settings.png"> </br>
    
    Refer to this link for more information:  
    https://www.youtube.com/watch?v=n2Cr_YRQk7o
