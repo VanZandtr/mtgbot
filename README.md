@@ -19,7 +19,7 @@ Step 7: Automate your code (optional)</br>
 Step 8: Setup email in email_settings.py (optional)</br>
 Step 9: Open powershell/command prompt in the mtgbot folder</br>
 Step 10; run: "python ./mtgbot"</br>
-Step 10: Enjoy!</br>
+Step 11: Enjoy!</br>
 
 ## Purpose and Goals:
    
