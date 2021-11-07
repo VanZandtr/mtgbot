@@ -1,5 +1,4 @@
 # <img style="float: left;" src="pics/title.png">
-Current Reddit link: https://www.reddit.com/r/mtgfinance/comments/nwzj8a/magic_finance_trending_bot_personal_project/
 
 ## Notice!
 This is a work in progress, so please assume there will be issues. 
@@ -154,9 +153,3 @@ A5: No problem! Feel free to direct message me on reddit at /u/Albus_Lupi. Thank
 ### AttributeError: 'ToastNotifier' object has no attribute 'classAtom'
 Problem Explaination: This issue is caused by a program crashing/quiting mid pop-up ("toast") notification.  
 Solution: If you are running from a IDE, a restart to reset object instances worked for me.  
-
-
-# Contributors & Testers:
-## Get your name here! Take the poll at: https://forms.gle/68wjkz8AdMi6SCiD7
-
-/u/your_reddit_name_here_pog
